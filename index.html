@@ -23,11 +23,13 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 .homeHero{background:linear-gradient(135deg,#eef8ff,#f7f1ff);border:1px solid #e5edf7;border-radius:24px;padding:18px;margin:14px 0 20px}.welcomeBadge{display:inline-flex;align-items:center;gap:7px;background:#fff;padding:7px 11px;border-radius:999px;font-size:13px;font-weight:800;box-shadow:0 3px 12px #0000000b}.featureRow{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.feature{background:white;border-radius:16px;padding:12px 7px;text-align:center;font-size:12px;font-weight:700}.learnerBar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f6f9fc;border-radius:18px;padding:12px 14px;margin:12px 0 16px}.learnerMini{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:25px}.menuProfile{background:linear-gradient(135deg,#eef8ff,#f5efff);border-radius:20px;padding:14px;margin-bottom:15px}.menuProfileTop{display:flex;align-items:center;gap:10px}.menuAvatar{width:46px;height:46px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:27px}.menuStats{display:flex;gap:8px;margin-top:10px}.menuStat{flex:1;background:white;border-radius:12px;padding:8px;text-align:center;font-size:12px;font-weight:700}.menuStat b{display:block;font-size:16px}.classPlaceholder{color:#64748b}
 
 .premiumBanner{background:linear-gradient(135deg,#fff7d6,#fff0b8);border:1px solid #f3d77a;border-radius:22px;padding:16px;margin:14px 0}.premiumBanner h3{margin:0 0 5px}.premiumBtn{background:#f5b700;color:#fff;padding:11px 14px;border-radius:14px}.premiumGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.plan{border:1px solid #e4eaf0;border-radius:20px;padding:16px;background:#fff}.plan.featured{border:2px solid #f5b700}.price{font-size:25px;font-weight:900;margin:7px 0}.lockFeature{display:flex;gap:8px;align-items:center;margin:8px 0;font-size:14px}.premiumModal{position:fixed;inset:0;background:#0007;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}.premiumBox{background:#fff;border-radius:26px;padding:22px;max-width:440px;width:100%;max-height:90vh;overflow:auto}.premiumBox .close{float:right;background:#eef2f6;padding:8px 12px;border-radius:12px}.upgradeNote{background:#f5f8fc;border-radius:16px;padding:12px;font-size:13px;color:#475569;margin-top:12px}
+
+.pageGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pageTile{background:#f6f9fc;border:1px solid #e7edf4;border-radius:20px;padding:18px;text-align:left}.pageTile b{display:block;font-size:17px;margin-top:5px}.pageIcon{font-size:34px}.pageHero{background:linear-gradient(135deg,#eef8ff,#f7f1ff);border-radius:24px;padding:20px;margin:14px 0}.reportBox{background:#f8fafc;border-radius:18px;padding:15px;margin:10px 0}.settingRow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#f7f9fc;border-radius:18px;padding:15px;margin:10px 0}.toggle{min-width:82px;background:#1689d7;color:white;padding:10px 12px;border-radius:14px}.toggle.off{background:#cbd5e1;color:#334155}.rewardCard{background:linear-gradient(135deg,#fff8d8,#fff0bd);border-radius:20px;padding:18px;margin:10px 0}.aboutList{line-height:1.8}.
 </style>
 </head>
 <body>
 <header class="header"><div><div class="logo">Learn<br>& Play</div><div style="font-size:12px;opacity:.9;margin-top:5px">Fun • Learn • Grow 🌟</div></div><div style="display:flex;gap:8px;align-items:center"><button class="menuBtn" onclick="openMenu()" aria-label="Open menu">☰</button><div class="score">⭐ <span id="stars">0</span></div></div></header>
-<div id="menuOverlay" class="menuOverlay hidden" onclick="closeMenu(event)"><aside class="sideMenu" onclick="event.stopPropagation()"><div class="menuHead"><h2 style="margin:0">☰ Menu</h2><button class="menuClose" onclick="closeMenu()">✕</button></div><div class="menuProfile"><div class="menuProfileTop"><div class="menuAvatar" id="menuAvatar">🧒</div><div><b id="menuName">New Learner</b><div class="small" id="menuClass">Class not selected</div></div></div><div class="menuStats"><div class="menuStat">⭐<b id="menuStars">0</b>Stars</div><div class="menuStat">🪙<b id="menuCoins">0</b>Coins</div><div class="menuStat">🔥<b id="menuStreak">0</b>Days</div></div></div><div class="menuSection">Learning</div><button class="menuItem" onclick="menuHome()">🏠 <span>Home</span></button><button class="menuItem" onclick="menuSubjects()">📚 <span>Subjects</span></button><button class="menuItem" onclick="showProfile();closeMenu()">👤 <span>My Profile</span></button><button class="menuItem" onclick="showProfileSection('progressList')">📊 <span>My Progress</span></button><button class="menuItem" onclick="showProfileSection('achievementList')">🏆 <span>Achievements</span></button><button class="menuItem" onclick="showProfileSection('parentSummary')">👨‍👩‍👧 <span>Parent Dashboard</span></button><div class="menuSection">More</div><button class="menuItem" onclick="showProfileSection('pCoins')">🎁 <span>Rewards</span></button><button class="menuItem" onclick="openPremium()">👑 <span>Premium</span></button><button class="menuItem" onclick="openSettings()">⚙️ <span>Settings</span></button><button class="menuItem" onclick="showAbout()">ℹ️ <span>About Learn & Play</span></button></aside></div>
+<div id="menuOverlay" class="menuOverlay hidden" onclick="closeMenu(event)"><aside class="sideMenu" onclick="event.stopPropagation()"><div class="menuHead"><h2 style="margin:0">☰ Menu</h2><button class="menuClose" onclick="closeMenu()">✕</button></div><div class="menuProfile"><div class="menuProfileTop"><div class="menuAvatar" id="menuAvatar">🧒</div><div><b id="menuName">New Learner</b><div class="small" id="menuClass">Class not selected</div></div></div><div class="menuStats"><div class="menuStat">⭐<b id="menuStars">0</b>Stars</div><div class="menuStat">🪙<b id="menuCoins">0</b>Coins</div><div class="menuStat">🔥<b id="menuStreak">0</b>Days</div></div></div><div class="menuSection">Learning</div><button class="menuItem" onclick="menuHome()">🏠 <span>Home</span></button><button class="menuItem" onclick="menuPage('subjects')">📚 <span>Subjects</span></button><button class="menuItem" onclick="showProfile();closeMenu()">👤 <span>My Profile</span></button><button class="menuItem" onclick="menuPage('progress')">📊 <span>My Progress</span></button><button class="menuItem" onclick="menuPage('achievements')">🏆 <span>Achievements</span></button><button class="menuItem" onclick="menuPage('parent')">👨‍👩‍👧 <span>Parent Dashboard</span></button><div class="menuSection">More</div><button class="menuItem" onclick="menuPage('rewards')">🎁 <span>Rewards</span></button><button class="menuItem" onclick="openPremium();closeMenu()">👑 <span>Premium</span></button><button class="menuItem" onclick="menuPage('settings')">⚙️ <span>Settings</span></button><button class="menuItem" onclick="menuPage('about')">ℹ️ <span>About Learn & Play</span></button></aside></div>
 <main class="wrap">
 <section id="home" class="card">
 <h1 id="welcomeTitle">👋 Welcome!</h1><p class="small">खेलते-खेलते सीखें • Learn while you play</p>
@@ -69,6 +71,11 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 <div class="card" style="padding:18px"><h3>🏅 Achievements</h3><div class="achGrid" id="achievementList"></div></div>
 <div class="card" style="padding:18px"><h3>👨‍👩‍👧 Parent Dashboard</h3><p class="small">यहाँ बच्चे की learning progress और performance का quick report देखें।</p><div id="parentSummary"></div></div>
 <div class="profileActions"><button class="back" onclick="editProfile()">✏️ Edit Profile</button><button class="danger" onclick="resetProgress()">🗑️ Reset Progress</button></div>
+</section>
+
+<section id="appPage" class="card hidden">
+<div class="row"><button class="back" onclick="goHome()">← Back</button><b id="appPageTitle">Learn & Play</b><span></span></div>
+<div id="appPageContent"></div>
 </section>
 
 <section id="quiz" class="card hidden">
@@ -219,6 +226,7 @@ function start(s,level=1){
  stars=Number(getP("stars")||0);
  document.getElementById("stars").textContent=stars;
  document.getElementById("home").classList.add("hidden");
+ document.getElementById("appPage").classList.add("hidden");
  document.getElementById("result").classList.add("hidden");
  document.getElementById("quiz").classList.remove("hidden");
  render();
@@ -297,17 +305,47 @@ function resetProgress(){
  if(!confirm("क्या आप इस बच्चे की saved progress reset करना चाहते हैं?"))return;
  const prefix="lp_profile_"+activeProfile+"_";Object.keys(localStorage).filter(k=>k.startsWith(prefix)).forEach(k=>localStorage.removeItem(k));location.reload();
 }
-function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2();refreshLearnerUI()}
+function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.add("hidden");document.getElementById("appPage").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2();refreshLearnerUI()}
 function openMenu(){document.getElementById("menuOverlay").classList.remove("hidden")}
 function closeMenu(e){if(!e || e.target===document.getElementById("menuOverlay"))document.getElementById("menuOverlay").classList.add("hidden")}
 function menuHome(){closeMenu();goHome()}
-function menuSubjects(){closeMenu();goHome();document.querySelector(".grid").scrollIntoView({behavior:"smooth",block:"center"})}
-function showProfileSection(id){if(!ensureProfile())return;showProfile();closeMenu();setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"center"})},80)}
-function openSettings(){
- closeMenu();if(!ensureProfile())return;const name=getProfileName();const sound=getP("sound")!=="off";const next=prompt("Settings\n\n1. Child name: "+name+"\n2. Sound: "+(sound?"ON":"OFF")+"\n\nSound बदलने के लिए ON या OFF लिखें:",sound?"ON":"OFF");if(next!==null && /^(on|off)$/i.test(next.trim()))setP("sound",next.trim().toLowerCase());
+function menuPage(type){
+ closeMenu();
+ if(type!=='about' && !ensureProfile()) return;
+ document.getElementById('home').classList.add('hidden');
+ document.getElementById('quiz').classList.add('hidden');
+ document.getElementById('result').classList.add('hidden');
+ document.getElementById('profile').classList.add('hidden');
+ document.getElementById('appPage').classList.remove('hidden');
+ renderAppPage(type);
 }
-
-function showAbout(){closeMenu();alert("Learn & Play\n\nA fun learning app for Nursery to Class 5.\nSubjects: Maths, English, Hindi, EVS & GK.\n\nLearn • Play • Grow 🌟")}
+function renderAppPage(type){
+ const title=document.getElementById('appPageTitle'), box=document.getElementById('appPageContent');
+ const name=getProfileName()||'Learner', cls=getProfileClass()||'Class not selected';
+ const subs=['Maths','English','Hindi','EVS','GK'], icons=['🔢','🔤','🪔','🌱','🌎'];
+ if(type==='subjects'){
+  title.textContent='📚 Subjects';
+  box.innerHTML='<div class="pageHero"><h2>Choose a Subject</h2><p class="small">'+name+' • '+cls+'<br>अपनी पसंद का subject चुनकर learning शुरू करें।</p></div><div class="pageGrid">'+subs.map((x,i)=>'<button class="pageTile" onclick="start(\''+x+'\')"><span class="pageIcon">'+icons[i]+'</span><b>'+x+'</b><span class="small">100 Questions</span></button>').join('')+'</div>';
+ } else if(type==='progress'){
+  title.textContent='📊 My Progress'; let totalA=0,totalQ=0,totalC=0;
+  const rows=subs.map((x,i)=>{const st=getStats(x);totalA+=st.attempts;totalQ+=st.answered;totalC+=st.correct;const pct=st.answered?Math.round(st.correct/st.answered*100):0;return '<div class="reportBox"><div class="progressHead"><span>'+icons[i]+' '+x+'</span><span>'+pct+'%</span></div><div class="bar"><span style="width:'+pct+'%"></span></div><div class="small" style="margin-top:7px">Quizzes: '+st.attempts+' • Best: '+st.best+'/100 • Correct: '+st.correct+'/'+st.answered+'</div></div>'}).join('');
+  const acc=totalQ?Math.round(totalC/totalQ*100):0; box.innerHTML='<div class="statGrid"><div class="stat">📝 Quizzes<b>'+totalA+'</b></div><div class="stat">🎯 Accuracy<b>'+acc+'%</b></div><div class="stat">⭐ Stars<b>'+Number(getP('stars')||0)+'</b></div><div class="stat">🔥 Streak<b>'+Number(getP('streak')||0)+'</b></div></div><div style="margin-top:15px">'+rows+'</div>';
+ } else if(type==='achievements'){
+  title.textContent='🏆 Achievements'; const totalAttempts=subs.reduce((n,x)=>n+getStats(x).attempts,0), totalCorrect=subs.reduce((n,x)=>n+getStats(x).correct,0); const badges=[['🌟','First Quiz',totalAttempts>=1],['⭐','50 Stars',Number(getP('stars')||0)>=50],['🔥','7 Day Streak',Number(getP('streak')||0)>=7],['🧠','Maths Master',getStats('Maths').best>=8],['📚','All Subjects',subs.every(x=>getStats(x).attempts>0)],['🏆','100 Correct',totalCorrect>=100]]; box.innerHTML='<div class="pageHero"><h2>Keep going, '+name+'! 🎉</h2><p class="small">Badges आपकी learning journey की उपलब्धियाँ हैं।</p></div><div class="achGrid">'+badges.map(x=>'<div class="ach '+(x[2]?'':'locked')+'"><div style="font-size:30px">'+x[0]+'</div><b>'+x[1]+'</b><div class="small">'+(x[2]?'Unlocked':'Locked')+'</div></div>').join('')+'</div>';
+ } else if(type==='parent'){
+  title.textContent='👨‍👩‍👧 Parent Dashboard'; let attempts=0,answered=0,correct=0; subs.forEach(x=>{const st=getStats(x);attempts+=st.attempts;answered+=st.answered;correct+=st.correct}); const acc=answered?Math.round(correct/answered*100):0; box.innerHTML='<div class="pageHero"><h2>'+name+' • '+cls+'</h2><p class="small">Learning performance का quick parent report</p></div><div class="statGrid"><div class="stat">📝 Total Quizzes<b>'+attempts+'</b></div><div class="stat">🎯 Accuracy<b>'+acc+'%</b></div><div class="stat">✅ Correct<b>'+correct+'</b></div><div class="stat">🔥 Streak<b>'+Number(getP('streak')||0)+' days</b></div></div><div class="reportBox" style="margin-top:14px"><b>💡 Parent Tip</b><p class="small">बच्चे को रोज़ 10–15 मिनट practice करने के लिए प्रोत्साहित करें और गलत answers को साथ में समझें।</p></div>';
+ } else if(type==='rewards'){
+  title.textContent='🎁 Rewards'; const starsN=Number(getP('stars')||0), coinsN=Number(getP('coins')||0); box.innerHTML='<div class="rewardCard"><div style="font-size:42px">⭐</div><h2 style="margin:5px 0">'+starsN+' Stars</h2><p class="small">हर सही answer से stars कमाएँ।</p></div><div class="rewardCard"><div style="font-size:42px">🪙</div><h2 style="margin:5px 0">'+coinsN+' Coins</h2><p class="small">Coins आपकी learning achievements के reward हैं।</p></div><div class="reportBox"><b>🎯 Next Goal</b><p class="small">'+(50-starsN>0?(50-starsN)+' और stars कमाकर 50-Star badge unlock करें!':'50-Star badge unlocked! 🎉')+'</p></div>';
+ } else if(type==='settings'){
+  title.textContent='⚙️ Settings'; const sound=getP('sound')!=='off'; box.innerHTML='<div class="pageHero"><h2>App Settings</h2><p class="small">अपने learning experience को manage करें।</p></div><div class="settingRow"><div><b>🔊 Sound</b><div class="small">Quiz feedback sound preference</div></div><button class="toggle '+(sound?'':'off')+'" onclick="toggleSound()">'+(sound?'ON':'OFF')+'</button></div><div class="settingRow"><div><b>👤 Learner Profile</b><div class="small">Name और class बदलें</div></div><button class="back" onclick="editProfile()">Edit</button></div><div class="settingRow"><div><b>🗑️ Reset Progress</b><div class="small">Current learner का progress reset करें</div></div><button class="danger" style="width:auto" onclick="resetProgress()">Reset</button></div>';
+ } else {
+  title.textContent='ℹ️ About Learn & Play'; box.innerHTML='<div class="pageHero"><div style="font-size:48px">🎓</div><h2>Learn & Play</h2><p class="small">Fun • Learn • Grow 🌟</p></div><div class="reportBox aboutList"><b>📚 Learning</b><br>Nursery से Class 5 तक Maths, English, Hindi, EVS और GK।<br><br><b>🎯 Features</b><br>100-question levels, profiles, progress, achievements, rewards और premium learning options।<br><br><b>❤️ Our Goal</b><br>बच्चों को खेल-खेल में सीखने के लिए सरल और enjoyable experience देना।</div>';
+ }
+}
+function toggleSound(){setP('sound',getP('sound')==='off'?'on':'off');renderAppPage('settings')}
+function showProfileSection(id){if(!ensureProfile())return;showProfile();closeMenu();setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},80)}
+function openSettings(){menuPage('settings')}
+function showAbout(){menuPage('about')}
 // Always ask for learner details when the app is opened/reloaded.
 activeProfile=null;
 document.getElementById("childName").value="";
