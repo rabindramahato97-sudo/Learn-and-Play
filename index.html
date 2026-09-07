@@ -20,19 +20,22 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 .small{color:#64748b}.back{background:#e9eef4}.center{text-align:center}.badge{font-size:50px}
 
 .profileBtn{background:#ffffff22;color:white;padding:10px 14px;border-radius:16px;font-size:15px}.menuBtn{background:#ffffff22;color:white;padding:10px 13px;border-radius:16px;font-size:22px}.menuOverlay{position:fixed;inset:0;background:#0006;z-index:50}.sideMenu{position:absolute;right:0;top:0;height:100%;width:min(330px,88vw);background:white;padding:22px;box-shadow:-8px 0 30px #0003;overflow:auto}.menuHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.menuItem{display:flex;align-items:center;gap:14px;width:100%;background:#f5f8fc;margin:9px 0;text-align:left;font-size:17px}.menuClose{background:#e9eef4;padding:10px 14px}.menuSection{font-size:12px;color:#64748b;font-weight:800;margin:18px 4px 7px;text-transform:uppercase}.profileHero{background:linear-gradient(135deg,#1689d7,#6c63ff);color:white;border-radius:26px;padding:22px;text-align:center}.avatar{width:82px;height:82px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:46px;margin:0 auto 10px}.statGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat{background:#f6f8fb;border-radius:18px;padding:15px;text-align:center}.stat b{display:block;font-size:24px;margin-top:4px}.progressRow{margin:13px 0}.progressHead{display:flex;justify-content:space-between;font-size:14px;font-weight:700}.bar{height:10px;background:#e8edf3;border-radius:10px;overflow:hidden;margin-top:6px}.bar span{display:block;height:100%;background:#1689d7;border-radius:10px}.achGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.ach{border-radius:17px;padding:13px;background:#f7f8fa;text-align:center}.ach.locked{opacity:.4;filter:grayscale(1)}.profileActions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.danger{background:#ffe0e0;color:#9b1c1c;width:100%}
+.homeHero{background:linear-gradient(135deg,#eef8ff,#f7f1ff);border:1px solid #e5edf7;border-radius:24px;padding:18px;margin:14px 0 20px}.welcomeBadge{display:inline-flex;align-items:center;gap:7px;background:#fff;padding:7px 11px;border-radius:999px;font-size:13px;font-weight:800;box-shadow:0 3px 12px #0000000b}.featureRow{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.feature{background:white;border-radius:16px;padding:12px 7px;text-align:center;font-size:12px;font-weight:700}.learnerBar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f6f9fc;border-radius:18px;padding:12px 14px;margin:12px 0 16px}.learnerMini{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:25px}.menuProfile{background:linear-gradient(135deg,#eef8ff,#f5efff);border-radius:20px;padding:14px;margin-bottom:15px}.menuProfileTop{display:flex;align-items:center;gap:10px}.menuAvatar{width:46px;height:46px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:27px}.menuStats{display:flex;gap:8px;margin-top:10px}.menuStat{flex:1;background:white;border-radius:12px;padding:8px;text-align:center;font-size:12px;font-weight:700}.menuStat b{display:block;font-size:16px}.classPlaceholder{color:#64748b}
 </style>
 </head>
 <body>
-<header class="header"><div class="logo">Learn<br>& Play</div><div style="display:flex;gap:8px;align-items:center"><button class="menuBtn" onclick="openMenu()" aria-label="Open menu">☰</button><div class="score">⭐ <span id="stars">0</span></div></div></header>
-<div id="menuOverlay" class="menuOverlay hidden" onclick="closeMenu(event)"><aside class="sideMenu" onclick="event.stopPropagation()"><div class="menuHead"><h2 style="margin:0">☰ Menu</h2><button class="menuClose" onclick="closeMenu()">✕</button></div><div class="menuSection">Learning</div><button class="menuItem" onclick="menuHome()">🏠 <span>Home</span></button><button class="menuItem" onclick="menuSubjects()">📚 <span>Subjects</span></button><button class="menuItem" onclick="showProfile();closeMenu()">👤 <span>My Profile</span></button><button class="menuItem" onclick="showProfileSection('progressList')">📊 <span>My Progress</span></button><button class="menuItem" onclick="showProfileSection('achievementList')">🏆 <span>Achievements</span></button><button class="menuItem" onclick="showProfileSection('parentSummary')">👨‍👩‍👧 <span>Parent Dashboard</span></button><div class="menuSection">More</div><button class="menuItem" onclick="showProfileSection('pCoins')">🎁 <span>Rewards</span></button><button class="menuItem" onclick="openSettings()">⚙️ <span>Settings</span></button><button class="menuItem" onclick="showAbout()">ℹ️ <span>About Learn & Play</span></button></aside></div>
+<header class="header"><div><div class="logo">Learn<br>& Play</div><div style="font-size:12px;opacity:.9;margin-top:5px">Fun • Learn • Grow 🌟</div></div><div style="display:flex;gap:8px;align-items:center"><button class="menuBtn" onclick="openMenu()" aria-label="Open menu">☰</button><div class="score">⭐ <span id="stars">0</span></div></div></header>
+<div id="menuOverlay" class="menuOverlay hidden" onclick="closeMenu(event)"><aside class="sideMenu" onclick="event.stopPropagation()"><div class="menuHead"><h2 style="margin:0">☰ Menu</h2><button class="menuClose" onclick="closeMenu()">✕</button></div><div class="menuProfile"><div class="menuProfileTop"><div class="menuAvatar" id="menuAvatar">🧒</div><div><b id="menuName">New Learner</b><div class="small" id="menuClass">Class not selected</div></div></div><div class="menuStats"><div class="menuStat">⭐<b id="menuStars">0</b>Stars</div><div class="menuStat">🪙<b id="menuCoins">0</b>Coins</div><div class="menuStat">🔥<b id="menuStreak">0</b>Days</div></div></div><div class="menuSection">Learning</div><button class="menuItem" onclick="menuHome()">🏠 <span>Home</span></button><button class="menuItem" onclick="menuSubjects()">📚 <span>Subjects</span></button><button class="menuItem" onclick="showProfile();closeMenu()">👤 <span>My Profile</span></button><button class="menuItem" onclick="showProfileSection('progressList')">📊 <span>My Progress</span></button><button class="menuItem" onclick="showProfileSection('achievementList')">🏆 <span>Achievements</span></button><button class="menuItem" onclick="showProfileSection('parentSummary')">👨‍👩‍👧 <span>Parent Dashboard</span></button><div class="menuSection">More</div><button class="menuItem" onclick="showProfileSection('pCoins')">🎁 <span>Rewards</span></button><button class="menuItem" onclick="openSettings()">⚙️ <span>Settings</span></button><button class="menuItem" onclick="showAbout()">ℹ️ <span>About Learn & Play</span></button></aside></div>
 <main class="wrap">
 <section id="home" class="card">
-<h1>👋 Welcome!</h1><p class="small">खेलते-खेलते सीखें • Learn while you play</p>
+<h1 id="welcomeTitle">👋 Welcome!</h1><p class="small">खेलते-खेलते सीखें • Learn while you play</p>
+<div class="homeHero"><span class="welcomeBadge">🎓 Personalized Learning</span><h3 style="margin:12px 0 5px">सीखें, खेलें और आगे बढ़ें!</h3><p class="small" style="margin:0">अपनी कक्षा चुनें और subjects के साथ learning journey शुरू करें।</p><div class="featureRow"><div class="feature">🧠<br>Smart Learning</div><div class="feature">🏆<br>Earn Badges</div><div class="feature">📊<br>Track Progress</div></div></div>
+<div id="learnerBar" class="learnerBar hidden"><div style="display:flex;align-items:center;gap:10px"><div class="learnerMini" id="learnerMini">🧒</div><div><b id="learnerWelcome">Welcome back!</b><div class="small" id="learnerClassText"></div></div></div><button class="back" onclick="editProfile()">✏️ Edit</button></div>
 <label>बच्चे का नाम</label>
-<input id="childName" placeholder="नाम लिखें" style="width:100%;padding:14px;border:2px solid #ddd;border-radius:14px;margin:8px 0 14px">
+<input id="childName" placeholder="बच्चे का नाम लिखें" autocomplete="off" style="width:100%;padding:14px;border:2px solid #ddd;border-radius:14px;margin:8px 0 14px">
 <label>कक्षा चुनें</label>
 <select id="classSelect" style="width:100%;padding:14px;border:2px solid #ddd;border-radius:14px;margin:8px 0 18px">
-<option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option>
+<option value="" class="classPlaceholder">कक्षा चुनें</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option>
 </select>
 <button class="primary" onclick="startLearning()" style="margin-bottom:18px">Start Learning 🚀</button>
 <div id="level2Panel" class="hidden" style="margin:10px 0 18px">
@@ -109,9 +112,29 @@ function levelKey(){
 }
 let subject="",qIndex=0,score=0,lives=3,coins=0,currentLevel=1;
 let stars=Number(localStorage.getItem("lp_stars")||0);
-document.getElementById("stars").textContent=stars;
+document.getElementById("stars").textContent=stars; refreshLearnerUI();
 document.getElementById("childName").value=localStorage.getItem("lp_name")||"";
-document.getElementById("classSelect").value=localStorage.getItem("lp_class")||"Nursery";
+document.getElementById("classSelect").value=localStorage.getItem("lp_class")||"";
+function refreshLearnerUI(){
+ const name=localStorage.getItem("lp_name")||"";
+ const cls=localStorage.getItem("lp_class")||"";
+ const has=!!name;
+ const title=document.getElementById("welcomeTitle");
+ const bar=document.getElementById("learnerBar");
+ if(title) title.textContent=has?"👋 Welcome back!":"👋 Welcome!";
+ if(bar) bar.classList.toggle("hidden",!has);
+ if(has){
+  document.getElementById("learnerWelcome").textContent="Welcome back, "+name+"!";
+  document.getElementById("learnerClassText").textContent=cls||"Class not selected";
+  document.getElementById("learnerMini").textContent=name.charAt(0).toUpperCase();
+ }
+ document.getElementById("menuName").textContent=name||"New Learner";
+ document.getElementById("menuClass").textContent=cls||"Class not selected";
+ document.getElementById("menuAvatar").textContent=has?name.charAt(0).toUpperCase():"🧒";
+ document.getElementById("menuStars").textContent=localStorage.getItem("lp_stars")||0;
+ document.getElementById("menuCoins").textContent=localStorage.getItem("lp_coins")||0;
+ document.getElementById("menuStreak").textContent=localStorage.getItem("lp_streak")||0;
+}
 
 function startLearning(){
  localStorage.setItem("lp_name",document.getElementById("childName").value||"");
@@ -213,7 +236,7 @@ function showProfile(){
  ];document.getElementById("pBadges").textContent=badges.filter(x=>x[2]).length;document.getElementById("achievementList").innerHTML=badges.map(x=>`<div class="ach ${x[2]?"":"locked"}"><div style="font-size:30px">${x[0]}</div><b>${x[1]}</b><div class="small">${x[2]?"Unlocked":"Locked"}</div></div>`).join("");
  const accuracy=totalAnswered?Math.round(totalCorrect/totalAnswered*100):0;document.getElementById("parentSummary").innerHTML=`<div class="statGrid"><div class="stat">📝 Quizzes<b>${totalAttempts}</b></div><div class="stat">🎯 Accuracy<b>${accuracy}%</b></div><div class="stat">✅ Correct<b>${totalCorrect}</b></div><div class="stat">🔥 Streak<b>${localStorage.getItem("lp_streak")||0}</b></div></div>`;
 }
-function editProfile(){document.getElementById("profile").classList.add("hidden");document.getElementById("home").classList.remove("hidden");document.getElementById("childName").focus();}
+function editProfile(){document.getElementById("profile").classList.add("hidden");document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden");refreshLearnerUI();document.getElementById("childName").focus();}
 function resetProgress(){if(!confirm("क्या आप इस device पर Learn & Play की progress reset करना चाहते हैं?"))return;Object.keys(localStorage).filter(k=>k.startsWith("lp_")).forEach(k=>localStorage.removeItem(k));location.reload();}
 function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2()}
 function openMenu(){document.getElementById("menuOverlay").classList.remove("hidden")}
@@ -223,6 +246,6 @@ function menuSubjects(){closeMenu();goHome();document.querySelector(".grid").scr
 function showProfileSection(id){showProfile();closeMenu();setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"center"})},80)}
 function openSettings(){closeMenu();const name=localStorage.getItem("lp_name")||"Learner";const sound=localStorage.getItem("lp_sound")!=="off";const next=prompt("Settings\n\n1. Child name: "+name+"\n2. Sound: "+(sound?"ON":"OFF")+"\n\nSound बदलने के लिए ON या OFF लिखें:",sound?"ON":"OFF");if(next!==null && /^(on|off)$/i.test(next.trim()))localStorage.setItem("lp_sound",next.trim().toLowerCase());}
 function showAbout(){closeMenu();alert("Learn & Play\n\nA fun learning app for Nursery to Class 5.\nSubjects: Maths, English, Hindi, EVS & GK.\n\nLearn • Play • Grow 🌟")}
-updateHomeLevel2(); window.addEventListener("pageshow",updateHomeLevel2); if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
+refreshLearnerUI(); updateHomeLevel2(); window.addEventListener("pageshow",()=>{refreshLearnerUI();updateHomeLevel2();}); if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
 </script>
 </body></html>
