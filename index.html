@@ -110,15 +110,60 @@ function questionsFor(s){
 function levelKey(){
  return "lp_unlock_"+document.getElementById("classSelect").value;
 }
+
+// V18 profile system: every app opening starts with a fresh learner selection,
+// while each child’s stars, coins, streak, progress and unlocks stay saved.
+let activeProfile=null;
+function profileId(name,cls){
+ return encodeURIComponent((name.trim().toLowerCase())+"|"+(cls||"").trim()).replace(/%/g,"_");
+}
+function pkey(k){ return activeProfile ? "lp_profile_"+activeProfile+"_"+k : null; }
+function getP(k){ const key=pkey(k); return key?localStorage.getItem(key):null; }
+function setP(k,v){ const key=pkey(k); if(key) localStorage.setItem(key,v); }
+function hasProfileData(id){ return localStorage.getItem("lp_profile_"+id+"_initialized")==="1"; }
+function activateProfile(name,cls){
+ name=(name||"").trim(); cls=(cls||"").trim();
+ if(!name || !cls){ alert("कृपया बच्चे का नाम और कक्षा चुनें।"); return false; }
+ const id=profileId(name,cls);
+ if(!hasProfileData(id)){
+  // Migrate older V15/V16/V17 data only when the same old child/class is selected.
+  const legacyName=(localStorage.getItem("lp_name")||"").trim();
+  const legacyClass=(localStorage.getItem("lp_class")||"").trim();
+  if(legacyName===name && legacyClass===cls){
+   const copyKeys=["lp_stars","lp_coins","lp_streak","lp_last_day","lp_sound"];
+   copyKeys.forEach(old=>{const v=localStorage.getItem(old); if(v!==null) localStorage.setItem("lp_profile_"+id+"_"+old.replace(/^lp_/,""),v);});
+   ["Maths","English","Hindi","EVS","GK"].forEach(sub=>{
+    const u=localStorage.getItem("lp_"+sub+"_level2"); if(u!==null) localStorage.setItem("lp_profile_"+id+"_unlock_"+sub+"_level2",u);
+    const st=localStorage.getItem("lp_stats_"+cls.replace(/\s+/g,"_")+"_"+sub); if(st!==null) localStorage.setItem("lp_profile_"+id+"_stats_"+sub,st);
+   });
+   ["lp_name","lp_class","lp_stars","lp_coins","lp_streak","lp_last_day","lp_sound","lp_Maths_level2","lp_English_level2","lp_Hindi_level2","lp_EVS_level2","lp_GK_level2"].forEach(k=>localStorage.removeItem(k));
+   ["Maths","English","Hindi","EVS","GK"].forEach(sub=>localStorage.removeItem("lp_stats_"+cls.replace(/\s+/g,"_")+"_"+sub));
+  }
+  localStorage.setItem("lp_profile_"+id+"_initialized","1");
+ }
+ activeProfile=id;
+ setP("name",name);
+ setP("class",cls);
+ document.getElementById("childName").value=name;
+ document.getElementById("classSelect").value=cls;
+ stars=Number(getP("stars")||0);
+ document.getElementById("stars").textContent=stars;
+ refreshLearnerUI(); updateHomeLevel2();
+ return true;
+}
+function ensureProfile(){
+ if(activeProfile) return true;
+ return activateProfile(document.getElementById("childName").value,document.getElementById("classSelect").value);
+}
 let subject="",qIndex=0,score=0,lives=3,coins=0,currentLevel=1;
-let stars=Number(localStorage.getItem("lp_stars")||0);
-document.getElementById("stars").textContent=stars; refreshLearnerUI();
-document.getElementById("childName").value=localStorage.getItem("lp_name")||"";
-document.getElementById("classSelect").value=localStorage.getItem("lp_class")||"";
+let stars=0;
+document.getElementById("stars").textContent=0;
+document.getElementById("childName").value="";
+document.getElementById("classSelect").value="";
 function refreshLearnerUI(){
- const name=localStorage.getItem("lp_name")||"";
- const cls=localStorage.getItem("lp_class")||"";
- const has=!!name;
+ const name=activeProfile ? (getP("name")||"") : "";
+ const cls=activeProfile ? (getP("class")||"") : "";
+ const has=!!activeProfile && !!name;
  const title=document.getElementById("welcomeTitle");
  const bar=document.getElementById("learnerBar");
  if(title) title.textContent=has?"👋 Welcome back!":"👋 Welcome!";
@@ -131,23 +176,21 @@ function refreshLearnerUI(){
  document.getElementById("menuName").textContent=name||"New Learner";
  document.getElementById("menuClass").textContent=cls||"Class not selected";
  document.getElementById("menuAvatar").textContent=has?name.charAt(0).toUpperCase():"🧒";
- document.getElementById("menuStars").textContent=localStorage.getItem("lp_stars")||0;
- document.getElementById("menuCoins").textContent=localStorage.getItem("lp_coins")||0;
- document.getElementById("menuStreak").textContent=localStorage.getItem("lp_streak")||0;
+ document.getElementById("menuStars").textContent=getP("stars")||0;
+ document.getElementById("menuCoins").textContent=getP("coins")||0;
+ document.getElementById("menuStreak").textContent=getP("streak")||0;
 }
 
 function startLearning(){
- localStorage.setItem("lp_name",document.getElementById("childName").value||"");
- const cls=document.getElementById("classSelect");
- if(cls) localStorage.setItem("lp_class", cls.value||"");
+ if(!ensureProfile()) return;
  start('Maths');
 }
 
 function subjectUnlocked(s){
- return localStorage.getItem("lp_"+s+"_level2")==="1";
+ return getP("unlock_"+s+"_level2")==="1";
 }
 function unlockSubject(s){
- localStorage.setItem("lp_"+s+"_level2","1");
+ setP("unlock_"+s+"_level2","1");
 }
 function updateHomeLevel2(){
  const panel=document.getElementById("level2Panel");
@@ -168,8 +211,10 @@ function continueLearning(){
 }
 
 function start(s,level=1){
+ if(!ensureProfile()) return;
  subject=s;currentLevel=level;qIndex=0;score=0;lives=3;coins=0;
- localStorage.setItem("lp_name",document.getElementById("childName").value||"");
+ stars=Number(getP("stars")||0);
+ document.getElementById("stars").textContent=stars;
  document.getElementById("home").classList.add("hidden");
  document.getElementById("result").classList.add("hidden");
  document.getElementById("quiz").classList.remove("hidden");
@@ -177,7 +222,7 @@ function start(s,level=1){
 }
 function render(){
  const q=questionsFor(subject)[qIndex];
- document.getElementById("levelInfo").textContent=(localStorage.getItem("lp_name")||"बच्चे")+ " • "+document.getElementById("classSelect").value+" • "+subject+" • Level "+currentLevel+" • Question "+(qIndex+1)+"/"+questionsFor(subject).length;
+ document.getElementById("levelInfo").textContent=(getProfileName()||"बच्चे")+ " • "+document.getElementById("classSelect").value+" • "+subject+" • Level "+currentLevel+" • Question "+(qIndex+1)+"/"+questionsFor(subject).length;
  document.getElementById("question").textContent=q[0];
  document.getElementById("lives").textContent=lives;
  document.getElementById("coins").textContent=coins;
@@ -190,7 +235,7 @@ function answer(i,b){
  [...document.querySelectorAll(".option")].forEach(x=>x.disabled=true);
  const correct = (typeof q[2] === "number") ? (i===q[2]) : (q[1][i]===q[2]);
  if(correct){
-  score++;const earned=(currentLevel===2?20:10);coins+=earned;stars++;localStorage.setItem("lp_stars",stars);localStorage.setItem("lp_coins",totalCoins()+earned);updateStreak();document.getElementById("stars").textContent=stars;
+  score++;const earned=(currentLevel===2?20:10);coins+=earned;stars++;setP("stars",stars);setP("coins",totalCoins()+earned);updateStreak();refreshLearnerUI();document.getElementById("stars").textContent=stars;
   b.classList.add("good");document.getElementById("feedback").textContent="🎉 सही जवाब! +⭐ +🪙";
  }else{
   lives--;b.classList.add("bad");document.getElementById("feedback").textContent="😊 कोशिश अच्छी थी!";
@@ -218,34 +263,54 @@ function finish(){
  updateHomeLevel2();
 }
 
-function classKey(){return document.getElementById("classSelect").value.replace(/\s+/g,"_");}
-function statsKey(s){return "lp_stats_"+classKey()+"_"+s;}
+function getProfileName(){ return activeProfile ? (getP("name")||"") : ""; }
+function getProfileClass(){ return activeProfile ? (getP("class")||"") : ""; }
+function classKey(){return getProfileClass().replace(/\s+/g,"_");}
+function statsKey(s){return activeProfile ? "lp_profile_"+activeProfile+"_stats_"+s : "lp_temp_stats_"+classKey()+"_"+s;}
 function getStats(s){try{return JSON.parse(localStorage.getItem(statsKey(s))||'{"attempts":0,"best":0,"answered":0,"correct":0}')}catch(e){return {attempts:0,best:0,answered:0,correct:0}}}
 function saveStats(s,sc,total){let st=getStats(s);st.attempts++;st.best=Math.max(st.best,sc);st.answered+=total;st.correct+=sc;localStorage.setItem(statsKey(s),JSON.stringify(st));}
-function updateStreak(){const today=new Date().toISOString().slice(0,10);const last=localStorage.getItem("lp_last_day");let n=Number(localStorage.getItem("lp_streak")||0);if(last!==today){if(last){const d=new Date(last);const t=new Date(today);const diff=Math.round((t-d)/86400000);n=diff===1?n+1:1}else n=1;localStorage.setItem("lp_last_day",today);localStorage.setItem("lp_streak",n)}return n;}
-function totalCoins(){let n=Number(localStorage.getItem("lp_coins")||0);return n;}
+function updateStreak(){const today=new Date().toISOString().slice(0,10);const last=getP("last_day");let n=Number(getP("streak")||0);if(last!==today){if(last){const d=new Date(last);const t=new Date(today);const diff=Math.round((t-d)/86400000);n=diff===1?n+1:1}else n=1;setP("last_day",today);setP("streak",n)}return n;}
+function totalCoins(){return Number(getP("coins")||0);}
 function showProfile(){
+ if(!ensureProfile()) return;
  document.getElementById("home").classList.add("hidden");document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.remove("hidden");
- const name=localStorage.getItem("lp_name")||"Learner", cls=localStorage.getItem("lp_class")||document.getElementById("classSelect").value||"Nursery";
+ const name=getProfileName()||"Learner", cls=getProfileClass()||"Class";
  document.getElementById("profileName").textContent=name;document.getElementById("profileClass").textContent=cls;
- document.getElementById("pStars").textContent=localStorage.getItem("lp_stars")||0;document.getElementById("pCoins").textContent=totalCoins();document.getElementById("pStreak").textContent=(localStorage.getItem("lp_streak")||0)+" days";
+ document.getElementById("profileAvatar").textContent=name.charAt(0).toUpperCase();
+ document.getElementById("pStars").textContent=getP("stars")||0;document.getElementById("pCoins").textContent=totalCoins();document.getElementById("pStreak").textContent=(getP("streak")||0)+" days";
  const subs=["Maths","English","Hindi","EVS","GK"];let totalAttempts=0,totalAnswered=0,totalCorrect=0;
  document.getElementById("progressList").innerHTML=subs.map((x,i)=>{const st=getStats(x);totalAttempts+=st.attempts;totalAnswered+=st.answered;totalCorrect+=st.correct;const pct=st.answered?Math.round(st.correct/st.answered*100):0;return `<div class="progressRow"><div class="progressHead"><span>${["🔢","🔤","🪔","🌱","🌎"][i]} ${x}</span><span>${pct}%</span></div><div class="bar"><span style="width:${pct}%"></span></div></div>`}).join("");
- const badges=[
- ["🌟","First Quiz",totalAttempts>=1],["⭐","50 Stars",Number(localStorage.getItem("lp_stars")||0)>=50],["🔥","7 Day Streak",Number(localStorage.getItem("lp_streak")||0)>=7],["🧠","Maths Master",getStats("Maths").best>=8],["📚","All Subjects",subs.every(x=>getStats(x).attempts>0)],["🏆","100 Correct",totalCorrect>=100]
- ];document.getElementById("pBadges").textContent=badges.filter(x=>x[2]).length;document.getElementById("achievementList").innerHTML=badges.map(x=>`<div class="ach ${x[2]?"":"locked"}"><div style="font-size:30px">${x[0]}</div><b>${x[1]}</b><div class="small">${x[2]?"Unlocked":"Locked"}</div></div>`).join("");
- const accuracy=totalAnswered?Math.round(totalCorrect/totalAnswered*100):0;document.getElementById("parentSummary").innerHTML=`<div class="statGrid"><div class="stat">📝 Quizzes<b>${totalAttempts}</b></div><div class="stat">🎯 Accuracy<b>${accuracy}%</b></div><div class="stat">✅ Correct<b>${totalCorrect}</b></div><div class="stat">🔥 Streak<b>${localStorage.getItem("lp_streak")||0}</b></div></div>`;
+ const badges=[["🌟","First Quiz",totalAttempts>=1],["⭐","50 Stars",Number(getP("stars")||0)>=50],["🔥","7 Day Streak",Number(getP("streak")||0)>=7],["🧠","Maths Master",getStats("Maths").best>=8],["📚","All Subjects",subs.every(x=>getStats(x).attempts>0)],["🏆","100 Correct",totalCorrect>=100]];
+ document.getElementById("pBadges").textContent=badges.filter(x=>x[2]).length;document.getElementById("achievementList").innerHTML=badges.map(x=>`<div class="ach ${x[2]?"":"locked"}"><div style="font-size:30px">${x[0]}</div><b>${x[1]}</b><div class="small">${x[2]?"Unlocked":"Locked"}</div></div>`).join("");
+ const accuracy=totalAnswered?Math.round(totalCorrect/totalAnswered*100):0;document.getElementById("parentSummary").innerHTML=`<div class="statGrid"><div class="stat">📝 Quizzes<b>${totalAttempts}</b></div><div class="stat">🎯 Accuracy<b>${accuracy}%</b></div><div class="stat">✅ Correct<b>${totalCorrect}</b></div><div class="stat">🔥 Streak<b>${getP("streak")||0}</b></div></div>`;
 }
-function editProfile(){document.getElementById("profile").classList.add("hidden");document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden");refreshLearnerUI();document.getElementById("childName").focus();}
-function resetProgress(){if(!confirm("क्या आप इस device पर Learn & Play की progress reset करना चाहते हैं?"))return;Object.keys(localStorage).filter(k=>k.startsWith("lp_")).forEach(k=>localStorage.removeItem(k));location.reload();}
-function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2()}
+
+function editProfile(){
+ document.getElementById("profile").classList.add("hidden");document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden");
+ activeProfile=null;document.getElementById("childName").value="";document.getElementById("classSelect").value="";refreshLearnerUI();updateHomeLevel2();document.getElementById("childName").focus();
+}
+function resetProgress(){
+ if(!activeProfile){alert("पहले बच्चे का नाम और कक्षा चुनें।");return;}
+ if(!confirm("क्या आप इस बच्चे की saved progress reset करना चाहते हैं?"))return;
+ const prefix="lp_profile_"+activeProfile+"_";Object.keys(localStorage).filter(k=>k.startsWith(prefix)).forEach(k=>localStorage.removeItem(k));location.reload();
+}
+function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2();refreshLearnerUI()}
 function openMenu(){document.getElementById("menuOverlay").classList.remove("hidden")}
 function closeMenu(e){if(!e || e.target===document.getElementById("menuOverlay"))document.getElementById("menuOverlay").classList.add("hidden")}
 function menuHome(){closeMenu();goHome()}
 function menuSubjects(){closeMenu();goHome();document.querySelector(".grid").scrollIntoView({behavior:"smooth",block:"center"})}
-function showProfileSection(id){showProfile();closeMenu();setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"center"})},80)}
-function openSettings(){closeMenu();const name=localStorage.getItem("lp_name")||"Learner";const sound=localStorage.getItem("lp_sound")!=="off";const next=prompt("Settings\n\n1. Child name: "+name+"\n2. Sound: "+(sound?"ON":"OFF")+"\n\nSound बदलने के लिए ON या OFF लिखें:",sound?"ON":"OFF");if(next!==null && /^(on|off)$/i.test(next.trim()))localStorage.setItem("lp_sound",next.trim().toLowerCase());}
+function showProfileSection(id){if(!ensureProfile())return;showProfile();closeMenu();setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"center"})},80)}
+function openSettings(){
+ closeMenu();if(!ensureProfile())return;const name=getProfileName();const sound=getP("sound")!=="off";const next=prompt("Settings\n\n1. Child name: "+name+"\n2. Sound: "+(sound?"ON":"OFF")+"\n\nSound बदलने के लिए ON या OFF लिखें:",sound?"ON":"OFF");if(next!==null && /^(on|off)$/i.test(next.trim()))setP("sound",next.trim().toLowerCase());
+}
+
 function showAbout(){closeMenu();alert("Learn & Play\n\nA fun learning app for Nursery to Class 5.\nSubjects: Maths, English, Hindi, EVS & GK.\n\nLearn • Play • Grow 🌟")}
-refreshLearnerUI(); updateHomeLevel2(); window.addEventListener("pageshow",()=>{refreshLearnerUI();updateHomeLevel2();}); if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
+// Always ask for learner details when the app is opened/reloaded.
+activeProfile=null;
+document.getElementById("childName").value="";
+document.getElementById("classSelect").value="";
+refreshLearnerUI(); updateHomeLevel2();
+window.addEventListener("pageshow",()=>{activeProfile=null;document.getElementById("childName").value="";document.getElementById("classSelect").value="";refreshLearnerUI();updateHomeLevel2();});
+if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
 </script>
 </body></html>
