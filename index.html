@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1685D8"><link rel="manifest" href="manifest.json">
+<title>Learn & Play</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(#dff8ff,#f7fff0);color:#17324d}
+.app{max-width:520px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between}.logo{font-size:30px;font-weight:900;color:#1685d8}.pill{background:#fff1a5;padding:10px;border-radius:20px}
+.card{background:white;padding:20px;border-radius:24px;margin:15px 0;box-shadow:0 6px 18px #0001}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{font:inherit}.subject,.option,.primary{border:0;border-radius:18px;padding:17px;font-weight:bold;cursor:pointer}.subject{min-height:100px}.math{background:#ffd5d9}.eng{background:#cfe8ff}.hindi{background:#ffe5b5}.evs{background:#d9f5be}.gk{background:#e6d8ff}
+.option{display:block;width:100%;margin:7px 0;background:#edf5fb}.primary{width:100%;background:#1685d8;color:#fff}.hidden{display:none}.correct{background:#b9f3c3!important}.wrong{background:#ffc2c2!important}
+.question{text-align:center;background:#fff8df;padding:22px;border-radius:18px;font-size:27px;font-weight:900}.center{text-align:center}.muted{color:#657a89}
+</style></head><body><div class="app">
+<div class="top"><div class="logo">Learn<br>& Play</div><div class="pill">⭐ <span id="stars">0</span></div></div>
+<section id="home" class="card"><h2>👋 Welcome!</h2><p class="muted">खेलते-खेलते सीखें</p>
+<div class="grid">
+<button class="subject math" onclick="start('Maths')">🔢<br>Maths</button>
+<button class="subject eng" onclick="start('English')">🔤<br>English</button>
+<button class="subject hindi" onclick="start('Hindi')">🪔<br>हिन्दी</button>
+<button class="subject evs" onclick="start('EVS')">🌱<br>EVS</button>
+<button class="subject gk" onclick="start('GK')">🌍<br>GK</button>
+</div></section>
+<section id="game" class="card hidden"><h2 id="title"></h2><div class="question" id="q"></div><div id="opts"></div><p id="msg" class="center"></p><button id="next" class="primary hidden" onclick="next()">अगला प्रश्न ➜</button></section>
+<section id="result" class="card center hidden"><h1>🎉 बहुत बढ़िया!</h1><h2 id="resultText"></h2><p>⭐ Stars earned: <span id="earned"></span></p><button class="primary" onclick="home()">फिर खेलें</button></section>
+</div>
+<script>
+const D={
+Maths:[["2 + 3 = ?",["4","5","6","7"],1],["5 - 2 = ?",["2","3","4","5"],1],["3 + 4 = ?",["6","7","8","9"],1],["10 - 5 = ?",["3","4","5","6"],2],["6 + 2 = ?",["7","8","9","10"],1]],
+English:[["Which starts with A?",["Apple","Ball","Cat","Dog"],0],["Which is a color?",["Run","Blue","Jump","Eat"],1],["Which is a fruit?",["Car","Apple","Chair","Book"],1],["Choose the animal",["Dog","Cat","Fish","Bird"],1],["Opposite of BIG?",["Tall","Small","Fast","Hot"],1]],
+Hindi:[["अ से कौन सा शब्द है?",["अनार","कमल","गाय","मछली"],0],["आम किस अक्षर से शुरू होता है?",["क","आ","म","स"],1],["‘जल’ का अर्थ क्या है?",["पानी","आग","हवा","मिट्टी"],0],["‘बड़ा’ का विलोम क्या है?",["ऊँचा","छोटा","तेज","गर्म"],1],["कौन सा फल है?",["कुर्सी","सेब","किताब","गाड़ी"],1]],
+EVS:[["Which part is usually green?",["Root","Leaf","Seed","Fruit"],1],["What do we drink?",["Water","Sand","Stone","Paper"],0],["Which is living?",["Tree","Chair","Ball","Book"],0],["Where do fish live?",["Water","Sky","Road","Desert"],0],["Which helps Earth?",["Littering","Planting trees","Wasting water","Burning plastic"],1]],
+GK:[["How many days are in a week?",["5","6","7","8"],2],["We live on which planet?",["Mars","Earth","Venus","Jupiter"],1],["How many legs does a dog have?",["2","3","4","5"],2],["Which gives daylight?",["Moon","Sun","Cloud","Rain"],1],["National bird of India?",["Peacock","Crow","Sparrow","Parrot"],0]]
+};
+let subject="",i=0,score=0,stars=Number(localStorage.getItem("lpStars")||0),answered=false;
+document.getElementById("stars").textContent=stars;
+function start(s){subject=s;i=0;score=0;show("game");render()}
+function render(){answered=false;let x=D[subject][i];document.getElementById("title").textContent=subject+" – Question "+(i+1)+"/5";document.getElementById("q").textContent=x[0];document.getElementById("msg").textContent="";document.getElementById("next").classList.add("hidden");let o=document.getElementById("opts");o.innerHTML="";x[1].forEach((a,n)=>{let b=document.createElement("button");b.className="option";b.textContent=a;b.onclick=()=>answer(n,b,x);o.appendChild(b)})}
+function answer(n,b,x){if(answered)return;answered=true;document.querySelectorAll(".option").forEach(a=>a.disabled=true);if(n===x[2]){score+=10;b.classList.add("correct");document.getElementById("msg").textContent="🎉 सही उत्तर! +10";}else{b.classList.add("wrong");document.querySelectorAll(".option")[x[2]].classList.add("correct");document.getElementById("msg").textContent="💡 अच्छा प्रयास!"}document.getElementById("next").classList.remove("hidden")}
+function next(){i++;if(i>=5){let e=score+(score===50?20:5);stars+=e;localStorage.setItem("lpStars",stars);document.getElementById("stars").textContent=stars;document.getElementById("earned").textContent=e;document.getElementById("resultText").textContent="आपका स्कोर: "+score+"/50";show("result")}else render()}
+function home(){show("home")}
+function show(id){document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden")}
+if("serviceWorker"in navigator)navigator.serviceWorker.register("service-worker.js");
+</script></body></html>
