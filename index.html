@@ -33,6 +33,10 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 </select>
 <button class="primary" onclick="startLearning()" style="margin-bottom:18px">Start Learning 🚀</button>
 <button id="homeLevel2Btn" class="primary hidden" onclick='start("Maths",2)' style="margin-bottom:18px">🔓 Maths Level 2</button>
+<button id="level2_English" class="primary hidden" onclick='start("English",2)' style="margin-bottom:18px">🔓 English Level 2</button>
+<button id="level2_Hindi" class="primary hidden" onclick='start("Hindi",2)' style="margin-bottom:18px">🔓 हिन्दी Level 2</button>
+<button id="level2_EVS" class="primary hidden" onclick='start("EVS",2)' style="margin-bottom:18px">🔓 EVS Level 2</button>
+<button id="level2_GK" class="primary hidden" onclick='start("GK",2)' style="margin-bottom:18px">🔓 GK Level 2</button>
 <p class="small">🔓 Level 2 unlocks after scoring 6/10 in Maths Level 1.</p>
 <div class="grid">
 <button class="subject math" onclick="start('Maths')">🔢<br>Maths</button>
@@ -98,7 +102,7 @@ function questionsFor(s){
 function levelKey(){
  return "lp_unlock_"+document.getElementById("classSelect").value;
 }
-function level2Unlocked(){
+function subjectUnlocked(subject){
  return localStorage.getItem(levelKey())==="2";
 }
 
@@ -115,12 +119,20 @@ function startLearning(){
  start('Maths');
 }
 
+function subjectUnlocked(s){
+ const key="lp_"+s+"_level2";
+ return localStorage.getItem(key)==="1";
+}
 function updateHomeLevel2(){
  const btn=document.getElementById("homeLevel2Btn");
- if(btn) btn.classList.toggle("hidden", !level2Unlocked());
+ if(btn) btn.classList.toggle("hidden", !subjectUnlocked("Maths"));
+ ["English","Hindi","EVS","GK"].forEach(s=>{
+  const b=document.getElementById("level2_"+s);
+  if(b) b.classList.toggle("hidden", !subjectUnlocked(s));
+ });
 }
 function continueLearning(){
- if(subject==="Maths" && currentLevel===1 && level2Unlocked()) start("Maths",2);
+ if(currentLevel===1 && subject && subjectUnlocked(subject)) start(subject,2);
  else goHome();
 }
 
@@ -159,7 +171,7 @@ function finish(){
  const total=questionsFor(subject).length;
  const passed=score>=6;
  if(subject==="Maths" && currentLevel===1 && passed) localStorage.setItem(levelKey(),"2");
- const unlocked=(subject==="Maths" && currentLevel===1 && passed)||level2Unlocked();
+ const unlocked=(subject==="Maths" && currentLevel===1 && passed)||subjectUnlocked(subject);
  document.getElementById("resultTitle").textContent=score>=8?"🌟 Excellent!":score>=6?"🎉 Great Job!":"👏 Keep Practising!";
  document.getElementById("resultText").textContent="आपने "+total+" में से "+score+" सही किए।  ⭐ कुल Stars: "+stars+"  🪙 Coins: "+coins+(subject==="Maths"&&currentLevel===1&&passed?"  🔓 Level 2 Unlocked!":"");
  const result=document.getElementById("result");
