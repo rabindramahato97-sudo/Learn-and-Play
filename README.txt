@@ -6,3 +6,5 @@ Upload index.html, manifest.json, service-worker.js and icon.svg to the GitHub P
 Version 3: Start Learning now saves the child profile and immediately opens the Maths quiz. Cache version updated to v3.
 
 Version 4: Maths has 10 class-specific questions for Nursery, LKG, UKG and Classes 1-5. Cache updated to v4.
+
+Version 5: Maths now has real Level 1 and Level 2. Level 2 unlocks after 6/10 in Level 1, with higher coin rewards. Cache updated to v5.
