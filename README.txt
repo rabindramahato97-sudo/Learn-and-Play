@@ -23,3 +23,5 @@ V11: Rebuilt subject Level-2 unlock/result flow and robust question-bank/answer 
 V12: Expanded the quiz bank to 30 questions per subject per level; Maths has 30 class-specific questions for each level for Nursery-Class 5. Cache updated to v12.
 
 V13: Expanded every subject to 100 questions per level. Maths has 100 questions per class for Level 1 and Level 2, Nursery-Class 5. Cache updated to v13.
+
+V14: Reworked class-wise difficulty. Maths has 100 questions per class per level with progressively appropriate arithmetic, fractions, decimals, geometry, measurement and word problems. English/Hindi/EVS/GK now use separate class-specific banks. Cache v14.
