@@ -12,3 +12,5 @@ Version 5: Maths now has real Level 1 and Level 2. Level 2 unlocks after 6/10 in
 V6: Maths Level 2 unlock, Home Level 2 button, Continue Learning opens Level 2, improved PWA cache update.
 
 V7: English, Hindi, EVS and GK now have Level 1 and Level 2 progression with 10 questions each.
+
+V8: Robust Level 2 unlock and home buttons for Maths, English, Hindi, EVS and GK; generic unlock storage and cache v8.

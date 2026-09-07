@@ -32,11 +32,14 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 <option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option>
 </select>
 <button class="primary" onclick="startLearning()" style="margin-bottom:18px">Start Learning 🚀</button>
-<button id="homeLevel2Btn" class="primary hidden" onclick='start("Maths",2)' style="margin-bottom:18px">🔓 Maths Level 2</button>
-<button id="level2_English" class="primary hidden" onclick='start("English",2)' style="margin-bottom:18px">🔓 English Level 2</button>
-<button id="level2_Hindi" class="primary hidden" onclick='start("Hindi",2)' style="margin-bottom:18px">🔓 हिन्दी Level 2</button>
-<button id="level2_EVS" class="primary hidden" onclick='start("EVS",2)' style="margin-bottom:18px">🔓 EVS Level 2</button>
-<button id="level2_GK" class="primary hidden" onclick='start("GK",2)' style="margin-bottom:18px">🔓 GK Level 2</button>
+<div id="level2Panel" class="hidden" style="margin:10px 0 18px">
+<div style="font-weight:800;margin-bottom:10px">🔓 Unlocked Level 2</div>
+<button id="homeLevel2Btn" class="primary hidden" onclick='start("Maths",2)' style="margin-bottom:8px">🔢 Maths Level 2</button>
+<button id="level2_English" class="primary hidden" onclick='start("English",2)' style="margin-bottom:8px">🇬🇧 English Level 2</button>
+<button id="level2_Hindi" class="primary hidden" onclick='start("Hindi",2)' style="margin-bottom:8px">🇮🇳 हिन्दी Level 2</button>
+<button id="level2_EVS" class="primary hidden" onclick='start("EVS",2)' style="margin-bottom:8px">🌱 EVS Level 2</button>
+<button id="level2_GK" class="primary hidden" onclick='start("GK",2)' style="margin-bottom:8px">🌍 GK Level 2</button>
+</div>
 <p class="small">🔓 Level 2 unlocks after scoring 6/10 in Maths Level 1.</p>
 <div class="grid">
 <button class="subject math" onclick="start('Maths')">🔢<br>Maths</button>
@@ -120,16 +123,20 @@ function startLearning(){
 }
 
 function subjectUnlocked(s){
- const key="lp_"+s+"_level2";
- return localStorage.getItem(key)==="1";
+ return localStorage.getItem("lp_"+s+"_level2")==="1" ||
+        localStorage.getItem("lp_unlock_"+s)==="2";
 }
 function updateHomeLevel2(){
- const btn=document.getElementById("homeLevel2Btn");
- if(btn) btn.classList.toggle("hidden", !subjectUnlocked("Maths"));
- ["English","Hindi","EVS","GK"].forEach(s=>{
-  const b=document.getElementById("level2_"+s);
-  if(b) b.classList.toggle("hidden", !subjectUnlocked(s));
+ const panel=document.getElementById("level2Panel");
+ const subjects=["Maths","English","Hindi","EVS","GK"];
+ let any=false;
+ subjects.forEach(s=>{
+  const b=document.getElementById(s==="Maths"?"homeLevel2Btn":"level2_"+s);
+  const ok=subjectUnlocked(s);
+  if(b) b.classList.toggle("hidden",!ok);
+  if(ok) any=true;
  });
+ if(panel) panel.classList.toggle("hidden",!any);
 }
 function continueLearning(){
  if(currentLevel===1 && subject && subjectUnlocked(subject)) start(subject,2);
@@ -170,15 +177,15 @@ function finish(){
  document.getElementById("result").classList.remove("hidden");
  const total=questionsFor(subject).length;
  const passed=score>=6;
- if(subject==="Maths" && currentLevel===1 && passed) localStorage.setItem(levelKey(),"2");
+ if(currentLevel===1 && passed){ localStorage.setItem("lp_"+subject+"_level2","1"); localStorage.setItem(levelKey(),"2"); }
  const unlocked=(subject==="Maths" && currentLevel===1 && passed)||subjectUnlocked(subject);
  document.getElementById("resultTitle").textContent=score>=8?"🌟 Excellent!":score>=6?"🎉 Great Job!":"👏 Keep Practising!";
  document.getElementById("resultText").textContent="आपने "+total+" में से "+score+" सही किए।  ⭐ कुल Stars: "+stars+"  🪙 Coins: "+coins+(subject==="Maths"&&currentLevel===1&&passed?"  🔓 Level 2 Unlocked!":"");
  const result=document.getElementById("result");
  let old=document.getElementById("level2Btn"); if(old) old.remove();
- if(subject==="Maths" && currentLevel===1 && unlocked){
-  const b=document.createElement("button"); b.id="level2Btn"; b.className="primary"; b.style.marginTop="12px"; b.textContent="🚀 Play Maths Level 2";
-  b.onclick=()=>start("Maths",2); result.appendChild(b); updateHomeLevel2();
+ if(currentLevel===1 && unlocked){
+  const b=document.createElement("button"); b.id="level2Btn"; b.className="primary"; b.style.marginTop="12px"; b.textContent="🚀 Play "+subject+" Level 2";
+  b.onclick=()=>start(subject,2); result.appendChild(b); updateHomeLevel2();
  }
 }
 function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2()}
