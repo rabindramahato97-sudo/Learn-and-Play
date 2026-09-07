@@ -379,6 +379,7 @@ function requestPremium(plan){
 function closeCheckout(e){
   if(!e || e.target===document.getElementById("checkoutModal")){
     document.getElementById("checkoutModal").classList.add("hidden");
+    document.getElementById("premiumModal").classList.add("hidden");
   }
 }
 function submitPremiumRequest(){
