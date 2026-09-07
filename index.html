@@ -1,13 +1,119 @@
-<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#1597e5"><link rel="manifest" href="manifest.json"><title>Learn & Play</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(#dff8ff,#f7fff1);color:#14243b}.app{max-width:720px;margin:auto;padding:18px 15px 35px}header{display:flex;justify-content:space-between;align-items:center}.logo{font-size:38px;line-height:.9;font-weight:900;color:#1187d0}.stats{background:#fff1a8;border-radius:22px;padding:10px 16px;font-weight:800;text-align:center}.card{background:#fff;border-radius:28px;padding:20px;margin-top:16px;box-shadow:0 7px 22px #0001}h1{margin:0 0 5px}.muted{color:#617083}input,select,button{font:inherit}input,select{width:100%;padding:13px;border:2px solid #dce7ef;border-radius:15px;margin:7px 0 12px}button{border:0;border-radius:16px;padding:14px;font-weight:800}.primary{background:#1289d6;color:#fff;width:100%}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.subject{height:125px;font-size:20px}.subject b{font-size:32px}.math{background:#ffd0d9}.eng{background:#cfe7ff}.hin{background:#ffe2ad}.evs{background:#d8f5bd}.gk{background:#e7d5ff}.row{display:flex;gap:10px}.row>*{flex:1}.hidden{display:none}.q{font-size:25px;font-weight:850;text-align:center;margin:20px 0}.answers{display:grid;gap:10px}.ans{background:#f2f7fb;border:2px solid #e0e9ef;text-align:left}.correct{background:#c9f3d8!important;border-color:#1b9b5d!important}.wrong{background:#ffd1d1!important;border-color:#d54b4b!important}.feedback{text-align:center;min-height:30px;font-weight:800}.bar{height:11px;background:#e9eef2;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:#20a463}.badge{display:inline-block;background:#fff1a8;padding:8px 12px;border-radius:99px;margin:4px}.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.level{background:#edf5fa}.locked{opacity:.45}footer{text-align:center;color:#718096;font-size:12px;margin-top:16px}
-</style></head><body><main class="app"><header><div class="logo">Learn<br>& Play</div><div class="stats">⭐ <span id="stars">0</span><br>🪙 <span id="coins">0</span></div></header>
-<section id="home" class="card"><h1>👋 Welcome!</h1><div class="muted">खेलते-खेलते सीखें</div><div class="card"><label>👦 बच्चे का नाम</label><input id="name" placeholder="नाम लिखें"><label>🎒 कक्षा</label><select id="grade"><option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select><button class="primary" onclick="saveProfile()">Start Learning 🚀</button></div><div id="welcome" class="muted"></div><div class="grid"><button class="subject math" onclick="start('Maths')"><b>🔢</b>Maths</button><button class="subject eng" onclick="start('English')"><b>🔤</b>English</button><button class="subject hin" onclick="start('Hindi')"><b>🪔</b>हिन्दी</button><button class="subject evs" onclick="start('EVS')"><b>🌱</b>EVS</button><button class="subject gk" onclick="start('GK')"><b>🌍</b>GK</button></div></section>
-<section id="quiz" class="card hidden"><div class="row"><button onclick="home()">← Home</button><div><b id="title"></b> &nbsp; ❤️ <span id="lives">3</span></div></div><div class="bar"><div id="fill" class="fill"></div></div><div id="q" class="q"></div><div id="answers" class="answers"></div><div id="feedback" class="feedback"></div><button id="next" class="primary hidden" onclick="next()">Next ➜</button></section>
-<section id="result" class="card hidden"><h1>🎉 बहुत बढ़िया!</h1><p id="resultText"></p><div id="badges"></div><button class="primary" onclick="home()">🏠 Home</button></section>
-<section id="progress" class="card"><h1>🏆 Progress</h1><p class="muted">4 या अधिक सही उत्तर पर अगला level unlock होगा।</p><div id="levels" class="levels"></div></section><footer>Learn & Play • Kids Educational Game</footer></main>
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#1689d7">
+<link rel="manifest" href="manifest.json">
+<title>Learn & Play</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(#dff7ff,#f4ffe9);color:#17243a}
+.header{background:#1689d7;color:white;padding:22px 20px 18px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:34px;font-weight:800;line-height:1.0}.score{background:#fff2a8;color:#222;padding:12px 18px;border-radius:22px;font-size:22px}
+.wrap{max-width:650px;margin:auto;padding:20px}.card{background:white;border-radius:28px;padding:22px;box-shadow:0 5px 20px #00000012;margin-bottom:18px}
+h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radius:18px;padding:16px 18px;font-weight:700;cursor:pointer}
+.primary{background:#1689d7;color:white;width:100%;font-size:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.subject{min-height:120px;font-size:20px}.math{background:#ffd1d9}.eng{background:#cce5ff}.hin{background:#ffe4ad}.evs{background:#d8f6bd}.gk{background:#e5d5ff}
+.hidden{display:none}.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.pill{background:#eef5ff;padding:8px 12px;border-radius:15px}
+.option{display:block;width:100%;margin:10px 0;background:#f2f5f8;text-align:left}.option:active{transform:scale(.99)}
+.good{background:#d7f8dc!important}.bad{background:#ffd8d8!important}
+.small{color:#64748b}.back{background:#e9eef4}.center{text-align:center}.badge{font-size:50px}
+</style>
+</head>
+<body>
+<header class="header"><div class="logo">Learn<br>& Play</div><div class="score">⭐ <span id="stars">0</span></div></header>
+<main class="wrap">
+<section id="home" class="card">
+<h1>👋 Welcome!</h1><p class="small">खेलते-खेलते सीखें • Learn while you play</p>
+<label>बच्चे का नाम</label>
+<input id="childName" placeholder="नाम लिखें" style="width:100%;padding:14px;border:2px solid #ddd;border-radius:14px;margin:8px 0 14px">
+<label>कक्षा चुनें</label>
+<select id="classSelect" style="width:100%;padding:14px;border:2px solid #ddd;border-radius:14px;margin:8px 0 18px">
+<option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option>
+</select>
+<button class="primary" onclick="startLearning()" style="margin-bottom:18px">Start Learning 🚀</button>
+<div class="grid">
+<button class="subject math" onclick="start('Maths')">🔢<br>Maths</button>
+<button class="subject eng" onclick="start('English')">🔤<br>English</button>
+<button class="subject hin" onclick="start('Hindi')">🪔<br>हिन्दी</button>
+<button class="subject evs" onclick="start('EVS')">🌱<br>EVS</button>
+<button class="subject gk" onclick="start('GK')">🌎<br>GK</button>
+</div>
+</section>
+
+<section id="quiz" class="card hidden">
+<div class="row"><button class="back" onclick="goHome()">← Back</button><div class="pill">❤️ <span id="lives">3</span> &nbsp; 🪙 <span id="coins">0</span></div></div>
+<p class="small" id="levelInfo"></p>
+<h2 id="question"></h2>
+<div id="options"></div>
+<p id="feedback" class="center"></p>
+</section>
+
+<section id="result" class="card hidden center">
+<div class="badge">🏆</div><h2 id="resultTitle"></h2><p id="resultText"></p>
+<button class="primary" onclick="goHome()">Continue Learning</button>
+</section>
+</main>
 <script>
-const D={Maths:[['2 + 3 = ?',['4','5','6','7'],'5'],['5 - 2 = ?',['2','3','4','5'],'3'],['3 × 2 = ?',['5','6','7','8'],'6'],['10 ÷ 2 = ?',['2','5','8','10'],'5'],['Which is bigger?',['7','3','5','2'],'7'],['4 + 4 = ?',['6','7','8','9'],'8']],English:[['Opposite of big?',['small','tall','fast','hot'],'small'],['Plural of cat?',['cats','catss','cates','cat'],'cats'],['A,E,I,O,U are…',['numbers','vowels','colors','shapes'],'vowels'],['Which is a fruit?',['Apple','Chair','Book','Ball'],'Apple'],['I ___ a student.',['am','is','are','be'],'am'],['Opposite of day?',['light','night','sun','morning'],'night']],Hindi:[['“बड़ा” का विलोम?',['छोटा','लंबा','ऊँचा','भारी'],'छोटा'],['“जल” का अर्थ?',['आग','पानी','हवा','मिट्टी'],'पानी'],['अ से कौन-सा शब्द?',['अनार','कमल','गमला','मछली'],'अनार'],['गाय हमें क्या देती है?',['दूध','पानी','रस','चाय'],'दूध'],['एक के बाद?',['दो','तीन','चार','पाँच'],'दो'],['हम लिखने के लिए?',['पेंसिल','जूता','कप','गेंद'],'पेंसिल']],EVS:[['Plants need what?',['Sunlight','TV','Shoes','Toys'],'Sunlight'],['We breathe in…',['Oxygen','Stone','Sand','Wood'],'Oxygen'],['Source of water?',['River','Chair','Road','Book'],'River'],['Earth is our…',['Home','Car','School','Toy'],'Home'],['Animal that gives milk?',['Cow','Lion','Tiger','Fox'],'Cow'],['Waste goes in…',['Dustbin','River','Road','Garden'],'Dustbin']],GK:[['Capital of India?',['New Delhi','Mumbai','Kolkata','Chennai'],'New Delhi'],['Days in a week?',['5','6','7','8'],'7'],['National animal of India?',['Tiger','Lion','Elephant','Horse'],'Tiger'],['Colors in a rainbow?',['5','6','7','8'],'7'],['Red Planet?',['Mars','Earth','Venus','Jupiter'],'Mars'],['Months in a year?',['10','11','12','13'],'12']]};
-let profile=JSON.parse(localStorage.lpProfile||'null'),s=JSON.parse(localStorage.lpStats||'{"stars":0,"coins":0,"level":1}'),sub,qs,i,lives,score;
-function save(){localStorage.lpStats=JSON.stringify(s);document.querySelector('#stars').textContent=s.stars;document.querySelector('#coins').textContent=s.coins;levels()}function saveProfile(){profile={name:document.querySelector('#name').value.trim()||'दोस्त',grade:document.querySelector('#grade').value};localStorage.lpProfile=JSON.stringify(profile);welcome()}function welcome(){if(profile){name.value=profile.name;grade.value=profile.grade;document.querySelector('#welcome').textContent='नमस्ते '+profile.name+'! '+profile.grade+' के लिए तैयार हो? 🌟'}}function start(x){sub=x;qs=[...D[x]].sort(()=>Math.random()-.5).slice(0,5);i=0;lives=3;score=0;home(false);quiz.classList.remove('hidden');title.textContent=sub;show()}function show(){let a=qs[i];q.textContent=a[0];answers.innerHTML='';feedback.textContent='';nextBtn(false);document.querySelector('#fill').style.width=(i/qs.length*100)+'%';a[1].forEach(v=>{let b=document.createElement('button');b.className='ans';b.textContent=v;b.onclick=()=>answer(b,v);answers.appendChild(b)})}function answer(b,v){[...answers.children].forEach(x=>x.disabled=true);if(v===qs[i][2]){b.classList.add('correct');score++;s.stars++;s.coins+=2;feedback.textContent='✅ सही! +1 ⭐ +2 🪙'}else{b.classList.add('wrong');lives--;feedback.textContent='❌ सही उत्तर: '+qs[i][2];}document.querySelector('#lives').textContent=lives;save();nextBtn(true)}function nextBtn(on){next.classList.toggle('hidden',!on)}function next(){if(lives<=0||i===qs.length-1){finish()}else{i++;show()}}function finish(){if(score>=4)s.level=Math.min(9,s.level+1);save();quiz.classList.add('hidden');result.classList.remove('hidden');resultText.textContent=(profile?profile.name:'दोस्त')+' ने '+score+' / '+qs.length+' सही किए।';badges.innerHTML=score>=4?'<span class="badge">🏅 Super Learner</span><span class="badge">⭐ Stars '+s.stars+'</span>':'<span class="badge">💪 Keep Learning</span>'}function home(showHome=true){quiz.classList.add('hidden');result.classList.add('hidden');if(showHome)homeEl.classList.remove('hidden');progress.classList.remove('hidden')}function levels(){levelsEl.innerHTML='';for(let n=1;n<=9;n++){let b=document.createElement('button');b.className='level '+(n>s.level?'locked':'');b.textContent=(n<=s.level?'🔓 ':'🔒 ')+'Level '+n;b.disabled=n>s.level;levelsEl.appendChild(b)}}
-const homeEl=document.querySelector('#home'),quiz=document.querySelector('#quiz'),result=document.querySelector('#result'),progress=document.querySelector('#progress'),next=document.querySelector('#next'),levelsEl=document.querySelector('#levels');welcome();save();if('serviceWorker'in navigator)navigator.serviceWorker.register('service-worker.js');
-</script></body></html>
+const bank={
+Maths:[
+["2 + 3 = ?",["4","5","6","7"],1],["5 - 2 = ?",["2","3","4","5"],1],["How many sides does a triangle have?",["2","3","4","5"],1],["10 + 5 = ?",["12","15","20","25"],1],["Which is bigger?",["7","3","5","1"],0]],
+English:[
+["Which is a vowel?",["B","C","A","D"],2],["Opposite of BIG?",["Small","Tall","Fast","Hot"],0],["Choose the animal:",["Apple","Dog","Chair","Book"],1],["Plural of CAT?",["CATs","CATS","CAT"],1],["Complete: I ___ happy.",["am","is","are"],0]],
+Hindi:[
+["'कमल' में पहला अक्षर कौन-सा है?",["क","म","ल","न"],0],["'दिन' का विलोम क्या है?",["सुबह","रात","घर","जल"],1],["'आम' क्या है?",["फल","फूल","पक्षी","खिलौना"],0],["'जल' का अर्थ क्या है?",["आग","पानी","हवा","मिट्टी"],1],["'गाय' कौन-सा जानवर है?",["पक्षी","जलचर","पालतू पशु","कीड़ा"],2]],
+EVS:[
+["Plants need ___ to grow.",["Sunlight","Plastic","Stone","Glass"],0],["We drink ___ to stay healthy.",["Water","Oil","Ink","Paint"],0],["Which is a living thing?",["Tree","Chair","Ball","Book"],0],["The Sun gives us ___",["Light","Ice","Paper","Soil"],0],["Which animal gives us milk?",["Cow","Lion","Tiger","Crow"],0]],
+GK:[
+["How many days are in a week?",["5","6","7","8"],2],["Which is our national animal?",["Lion","Tiger","Elephant","Horse"],1],["How many colours are in a rainbow?",["5","6","7","8"],2],["Which planet do we live on?",["Mars","Earth","Jupiter","Venus"],1],["What is the capital of India?",["Mumbai","Kolkata","New Delhi","Chennai"],2]]
+};
+let subject="",qIndex=0,score=0,lives=3,coins=0;
+let stars=Number(localStorage.getItem("lp_stars")||0);
+document.getElementById("stars").textContent=stars;
+document.getElementById("childName").value=localStorage.getItem("lp_name")||"";
+
+function startLearning(){
+ localStorage.setItem("lp_name",document.getElementById("childName").value||"");
+ const cls=document.getElementById("classSelect");
+ if(cls) localStorage.setItem("lp_class", cls.value||"");
+ start('Maths');
+}
+function start(s){
+ subject=s;qIndex=0;score=0;lives=3;coins=0;
+ localStorage.setItem("lp_name",document.getElementById("childName").value||"");
+ document.getElementById("home").classList.add("hidden");
+ document.getElementById("result").classList.add("hidden");
+ document.getElementById("quiz").classList.remove("hidden");
+ render();
+}
+function render(){
+ const q=bank[subject][qIndex];
+ document.getElementById("levelInfo").textContent=(localStorage.getItem("lp_name")||"बच्चे")+ " • "+document.getElementById("classSelect").value+" • "+subject+" • Level "+(qIndex+1);
+ document.getElementById("question").textContent=q[0];
+ document.getElementById("lives").textContent=lives;
+ document.getElementById("coins").textContent=coins;
+ document.getElementById("feedback").textContent="";
+ const box=document.getElementById("options");box.innerHTML="";
+ q[1].forEach((a,i)=>{let b=document.createElement("button");b.className="option";b.textContent=a;b.onclick=()=>answer(i,b);box.appendChild(b)});
+}
+function answer(i,b){
+ const q=bank[subject][qIndex];
+ [...document.querySelectorAll(".option")].forEach(x=>x.disabled=true);
+ if(i===q[2]){
+  score++;coins+=10;stars++;localStorage.setItem("lp_stars",stars);document.getElementById("stars").textContent=stars;
+  b.classList.add("good");document.getElementById("feedback").textContent="🎉 सही जवाब! +⭐ +🪙";
+ }else{
+  lives--;b.classList.add("bad");document.getElementById("feedback").textContent="😊 कोशिश अच्छी थी!";
+ }
+ setTimeout(()=>{if(lives<=0||qIndex===bank[subject].length-1) finish();else{qIndex++;render()}},700);
+}
+function finish(){
+ document.getElementById("quiz").classList.add("hidden");
+ document.getElementById("result").classList.remove("hidden");
+ document.getElementById("resultTitle").textContent=score>=4?"🌟 Excellent!":"👏 Well Done!";
+ document.getElementById("resultText").textContent="आपने "+bank[subject].length+" में से "+score+" सही किए।  ⭐ कुल Stars: "+stars+"  🪙 Coins: "+coins;
+}
+function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden")}
+if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
+</script>
+</body></html>

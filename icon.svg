@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#1597e5"/><circle cx="256" cy="220" r="120" fill="#ffd85a"/><circle cx="215" cy="205" r="14" fill="#14243b"/><circle cx="297" cy="205" r="14" fill="#14243b"/><path d="M210 255 Q256 295 302 255" fill="none" stroke="#14243b" stroke-width="14" stroke-linecap="round"/><text x="256" y="405" text-anchor="middle" font-family="Arial" font-size="72" font-weight="800" fill="white">L&amp;P</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+<rect width="256" height="256" rx="55" fill="#1689d7"/>
+<circle cx="128" cy="105" r="62" fill="#ffd86b"/>
+<circle cx="104" cy="96" r="8" fill="#17243a"/><circle cx="152" cy="96" r="8" fill="#17243a"/>
+<path d="M98 125 Q128 150 158 125" fill="none" stroke="#17243a" stroke-width="9" stroke-linecap="round"/>
+<text x="128" y="205" text-anchor="middle" font-family="Arial" font-size="30" font-weight="bold" fill="white">L&amp;P</text>
+</svg>
