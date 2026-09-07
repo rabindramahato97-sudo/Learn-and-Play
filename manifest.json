@@ -1,17 +1,1 @@
-{
-  "name": "Learn & Play",
-  "short_name": "LearnPlay",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#dff8ff",
-  "theme_color": "#1685D8",
-  "description": "Kids educational learning game",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
-}
+{"name":"Learn & Play","short_name":"LearnPlay","start_url":"./","display":"standalone","background_color":"#e9fbff","theme_color":"#1597e5","description":"Kids educational learning game","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
