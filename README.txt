@@ -1,27 +1,23 @@
-Learn & Play PWA V7
-Features: child name, Nursery-Class 5 selection, Maths/English/Hindi/EVS/GK, 3 lives, stars, coins, quiz levels and rewards.
-Upload index.html, manifest.json, service-worker.js and icon.svg to the GitHub Pages repository root.
+Learn & Play V15 – Professional Profile Edition
 
+Based on V14 Class-wise 100 Questions.
 
-Version 3: Start Learning now saves the child profile and immediately opens the Maths quiz. Cache version updated to v3.
+New features:
+- Professional child Profile screen
+- Stars, Coins, Learning Streak and Badge summary
+- Subject-wise learning progress bars
+- Accuracy and quiz statistics
+- Achievement / badge system
+- Parent Dashboard quick report
+- Edit Profile shortcut
+- Reset Progress option
+- LocalStorage-based progress persistence
 
-Version 4: Maths has 10 class-specific questions for Nursery, LKG, UKG and Classes 1-5. Cache updated to v4.
+Files:
+index.html
+manifest.json
+service-worker.js
+icon.svg
+README.txt
 
-Version 5: Maths now has real Level 1 and Level 2. Level 2 unlocks after 6/10 in Level 1, with higher coin rewards. Cache updated to v5.
-
-V6: Maths Level 2 unlock, Home Level 2 button, Continue Learning opens Level 2, improved PWA cache update.
-
-V7: English, Hindi, EVS and GK now have Level 1 and Level 2 progression with 10 questions each.
-
-V8: Robust Level 2 unlock and home buttons for Maths, English, Hindi, EVS and GK; generic unlock storage and cache v8.
-
-V9: Fixed non-Maths answer checking; English, Hindi, EVS and GK can now correctly score and unlock Level 2. Cache v9.
-
-V11: Rebuilt subject Level-2 unlock/result flow and robust question-bank/answer handling.
-
-
-V12: Expanded the quiz bank to 30 questions per subject per level; Maths has 30 class-specific questions for each level for Nursery-Class 5. Cache updated to v12.
-
-V13: Expanded every subject to 100 questions per level. Maths has 100 questions per class for Level 1 and Level 2, Nursery-Class 5. Cache updated to v13.
-
-V14: Reworked class-wise difficulty. Maths has 100 questions per class per level with progressively appropriate arithmetic, fractions, decimals, geometry, measurement and word problems. English/Hindi/EVS/GK now use separate class-specific banks. Cache v14.
+V16: Added professional hamburger menu with Home, Subjects, Profile, Progress, Achievements, Parent Dashboard, Rewards, Settings and About navigation. Service worker cache bumped to v16.

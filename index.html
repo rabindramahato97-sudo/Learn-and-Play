@@ -18,10 +18,13 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 .option{display:block;width:100%;margin:10px 0;background:#f2f5f8;text-align:left}.option:active{transform:scale(.99)}
 .good{background:#d7f8dc!important}.bad{background:#ffd8d8!important}
 .small{color:#64748b}.back{background:#e9eef4}.center{text-align:center}.badge{font-size:50px}
+
+.profileBtn{background:#ffffff22;color:white;padding:10px 14px;border-radius:16px;font-size:15px}.menuBtn{background:#ffffff22;color:white;padding:10px 13px;border-radius:16px;font-size:22px}.menuOverlay{position:fixed;inset:0;background:#0006;z-index:50}.sideMenu{position:absolute;right:0;top:0;height:100%;width:min(330px,88vw);background:white;padding:22px;box-shadow:-8px 0 30px #0003;overflow:auto}.menuHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.menuItem{display:flex;align-items:center;gap:14px;width:100%;background:#f5f8fc;margin:9px 0;text-align:left;font-size:17px}.menuClose{background:#e9eef4;padding:10px 14px}.menuSection{font-size:12px;color:#64748b;font-weight:800;margin:18px 4px 7px;text-transform:uppercase}.profileHero{background:linear-gradient(135deg,#1689d7,#6c63ff);color:white;border-radius:26px;padding:22px;text-align:center}.avatar{width:82px;height:82px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:46px;margin:0 auto 10px}.statGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat{background:#f6f8fb;border-radius:18px;padding:15px;text-align:center}.stat b{display:block;font-size:24px;margin-top:4px}.progressRow{margin:13px 0}.progressHead{display:flex;justify-content:space-between;font-size:14px;font-weight:700}.bar{height:10px;background:#e8edf3;border-radius:10px;overflow:hidden;margin-top:6px}.bar span{display:block;height:100%;background:#1689d7;border-radius:10px}.achGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.ach{border-radius:17px;padding:13px;background:#f7f8fa;text-align:center}.ach.locked{opacity:.4;filter:grayscale(1)}.profileActions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.danger{background:#ffe0e0;color:#9b1c1c;width:100%}
 </style>
 </head>
 <body>
-<header class="header"><div class="logo">Learn<br>& Play</div><div class="score">⭐ <span id="stars">0</span></div></header>
+<header class="header"><div class="logo">Learn<br>& Play</div><div style="display:flex;gap:8px;align-items:center"><button class="menuBtn" onclick="openMenu()" aria-label="Open menu">☰</button><div class="score">⭐ <span id="stars">0</span></div></div></header>
+<div id="menuOverlay" class="menuOverlay hidden" onclick="closeMenu(event)"><aside class="sideMenu" onclick="event.stopPropagation()"><div class="menuHead"><h2 style="margin:0">☰ Menu</h2><button class="menuClose" onclick="closeMenu()">✕</button></div><div class="menuSection">Learning</div><button class="menuItem" onclick="menuHome()">🏠 <span>Home</span></button><button class="menuItem" onclick="menuSubjects()">📚 <span>Subjects</span></button><button class="menuItem" onclick="showProfile();closeMenu()">👤 <span>My Profile</span></button><button class="menuItem" onclick="showProfileSection('progressList')">📊 <span>My Progress</span></button><button class="menuItem" onclick="showProfileSection('achievementList')">🏆 <span>Achievements</span></button><button class="menuItem" onclick="showProfileSection('parentSummary')">👨‍👩‍👧 <span>Parent Dashboard</span></button><div class="menuSection">More</div><button class="menuItem" onclick="showProfileSection('pCoins')">🎁 <span>Rewards</span></button><button class="menuItem" onclick="openSettings()">⚙️ <span>Settings</span></button><button class="menuItem" onclick="showAbout()">ℹ️ <span>About Learn & Play</span></button></aside></div>
 <main class="wrap">
 <section id="home" class="card">
 <h1>👋 Welcome!</h1><p class="small">खेलते-खेलते सीखें • Learn while you play</p>
@@ -48,6 +51,19 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 <button class="subject evs" onclick="start('EVS')">🌱<br>EVS</button>
 <button class="subject gk" onclick="start('GK')">🌎<br>GK</button>
 </div>
+</section>
+
+<section id="profile" class="card hidden">
+<div class="row"><button class="back" onclick="goHome()">← Back</button><b>My Profile</b><span></span></div>
+<div class="profileHero" style="margin-top:14px"><div class="avatar" id="profileAvatar">🧒</div><h2 id="profileName" style="margin:0 0 4px">Learner</h2><div id="profileClass">Class</div></div>
+<div class="statGrid" style="margin-top:14px">
+<div class="stat">⭐ Stars<b id="pStars">0</b></div><div class="stat">🪙 Coins<b id="pCoins">0</b></div>
+<div class="stat">🔥 Streak<b id="pStreak">0 days</b></div><div class="stat">🏆 Badges<b id="pBadges">0</b></div>
+</div>
+<div class="card" style="padding:18px;margin-top:14px"><h3>📊 Learning Progress</h3><div id="progressList"></div></div>
+<div class="card" style="padding:18px"><h3>🏅 Achievements</h3><div class="achGrid" id="achievementList"></div></div>
+<div class="card" style="padding:18px"><h3>👨‍👩‍👧 Parent Dashboard</h3><p class="small">यहाँ बच्चे की learning progress और performance का quick report देखें।</p><div id="parentSummary"></div></div>
+<div class="profileActions"><button class="back" onclick="editProfile()">✏️ Edit Profile</button><button class="danger" onclick="resetProgress()">🗑️ Reset Progress</button></div>
 </section>
 
 <section id="quiz" class="card hidden">
@@ -151,7 +167,7 @@ function answer(i,b){
  [...document.querySelectorAll(".option")].forEach(x=>x.disabled=true);
  const correct = (typeof q[2] === "number") ? (i===q[2]) : (q[1][i]===q[2]);
  if(correct){
-  score++;coins+=(currentLevel===2?20:10);stars++;localStorage.setItem("lp_stars",stars);document.getElementById("stars").textContent=stars;
+  score++;const earned=(currentLevel===2?20:10);coins+=earned;stars++;localStorage.setItem("lp_stars",stars);localStorage.setItem("lp_coins",totalCoins()+earned);updateStreak();document.getElementById("stars").textContent=stars;
   b.classList.add("good");document.getElementById("feedback").textContent="🎉 सही जवाब! +⭐ +🪙";
  }else{
   lives--;b.classList.add("bad");document.getElementById("feedback").textContent="😊 कोशिश अच्छी थी!";
@@ -163,6 +179,7 @@ function finish(){
  document.getElementById("result").classList.remove("hidden");
  const total=questionsFor(subject).length;
  const passed=score>=6;
+ saveStats(subject,score,total);
  if(currentLevel===1 && passed) unlockSubject(subject);
  const unlocked=(currentLevel===1 && passed)||subjectUnlocked(subject);
  document.getElementById("resultTitle").textContent=score>=8?"🌟 Excellent!":score>=6?"🎉 Great Job!":"👏 Keep Practising!";
@@ -177,7 +194,35 @@ function finish(){
  }
  updateHomeLevel2();
 }
-function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2()}
+
+function classKey(){return document.getElementById("classSelect").value.replace(/\s+/g,"_");}
+function statsKey(s){return "lp_stats_"+classKey()+"_"+s;}
+function getStats(s){try{return JSON.parse(localStorage.getItem(statsKey(s))||'{"attempts":0,"best":0,"answered":0,"correct":0}')}catch(e){return {attempts:0,best:0,answered:0,correct:0}}}
+function saveStats(s,sc,total){let st=getStats(s);st.attempts++;st.best=Math.max(st.best,sc);st.answered+=total;st.correct+=sc;localStorage.setItem(statsKey(s),JSON.stringify(st));}
+function updateStreak(){const today=new Date().toISOString().slice(0,10);const last=localStorage.getItem("lp_last_day");let n=Number(localStorage.getItem("lp_streak")||0);if(last!==today){if(last){const d=new Date(last);const t=new Date(today);const diff=Math.round((t-d)/86400000);n=diff===1?n+1:1}else n=1;localStorage.setItem("lp_last_day",today);localStorage.setItem("lp_streak",n)}return n;}
+function totalCoins(){let n=Number(localStorage.getItem("lp_coins")||0);return n;}
+function showProfile(){
+ document.getElementById("home").classList.add("hidden");document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.remove("hidden");
+ const name=localStorage.getItem("lp_name")||"Learner", cls=localStorage.getItem("lp_class")||document.getElementById("classSelect").value||"Nursery";
+ document.getElementById("profileName").textContent=name;document.getElementById("profileClass").textContent=cls;
+ document.getElementById("pStars").textContent=localStorage.getItem("lp_stars")||0;document.getElementById("pCoins").textContent=totalCoins();document.getElementById("pStreak").textContent=(localStorage.getItem("lp_streak")||0)+" days";
+ const subs=["Maths","English","Hindi","EVS","GK"];let totalAttempts=0,totalAnswered=0,totalCorrect=0;
+ document.getElementById("progressList").innerHTML=subs.map((x,i)=>{const st=getStats(x);totalAttempts+=st.attempts;totalAnswered+=st.answered;totalCorrect+=st.correct;const pct=st.answered?Math.round(st.correct/st.answered*100):0;return `<div class="progressRow"><div class="progressHead"><span>${["🔢","🔤","🪔","🌱","🌎"][i]} ${x}</span><span>${pct}%</span></div><div class="bar"><span style="width:${pct}%"></span></div></div>`}).join("");
+ const badges=[
+ ["🌟","First Quiz",totalAttempts>=1],["⭐","50 Stars",Number(localStorage.getItem("lp_stars")||0)>=50],["🔥","7 Day Streak",Number(localStorage.getItem("lp_streak")||0)>=7],["🧠","Maths Master",getStats("Maths").best>=8],["📚","All Subjects",subs.every(x=>getStats(x).attempts>0)],["🏆","100 Correct",totalCorrect>=100]
+ ];document.getElementById("pBadges").textContent=badges.filter(x=>x[2]).length;document.getElementById("achievementList").innerHTML=badges.map(x=>`<div class="ach ${x[2]?"":"locked"}"><div style="font-size:30px">${x[0]}</div><b>${x[1]}</b><div class="small">${x[2]?"Unlocked":"Locked"}</div></div>`).join("");
+ const accuracy=totalAnswered?Math.round(totalCorrect/totalAnswered*100):0;document.getElementById("parentSummary").innerHTML=`<div class="statGrid"><div class="stat">📝 Quizzes<b>${totalAttempts}</b></div><div class="stat">🎯 Accuracy<b>${accuracy}%</b></div><div class="stat">✅ Correct<b>${totalCorrect}</b></div><div class="stat">🔥 Streak<b>${localStorage.getItem("lp_streak")||0}</b></div></div>`;
+}
+function editProfile(){document.getElementById("profile").classList.add("hidden");document.getElementById("home").classList.remove("hidden");document.getElementById("childName").focus();}
+function resetProgress(){if(!confirm("क्या आप इस device पर Learn & Play की progress reset करना चाहते हैं?"))return;Object.keys(localStorage).filter(k=>k.startsWith("lp_")).forEach(k=>localStorage.removeItem(k));location.reload();}
+function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("profile").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2()}
+function openMenu(){document.getElementById("menuOverlay").classList.remove("hidden")}
+function closeMenu(e){if(!e || e.target===document.getElementById("menuOverlay"))document.getElementById("menuOverlay").classList.add("hidden")}
+function menuHome(){closeMenu();goHome()}
+function menuSubjects(){closeMenu();goHome();document.querySelector(".grid").scrollIntoView({behavior:"smooth",block:"center"})}
+function showProfileSection(id){showProfile();closeMenu();setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"center"})},80)}
+function openSettings(){closeMenu();const name=localStorage.getItem("lp_name")||"Learner";const sound=localStorage.getItem("lp_sound")!=="off";const next=prompt("Settings\n\n1. Child name: "+name+"\n2. Sound: "+(sound?"ON":"OFF")+"\n\nSound बदलने के लिए ON या OFF लिखें:",sound?"ON":"OFF");if(next!==null && /^(on|off)$/i.test(next.trim()))localStorage.setItem("lp_sound",next.trim().toLowerCase());}
+function showAbout(){closeMenu();alert("Learn & Play\n\nA fun learning app for Nursery to Class 5.\nSubjects: Maths, English, Hindi, EVS & GK.\n\nLearn • Play • Grow 🌟")}
 updateHomeLevel2(); window.addEventListener("pageshow",updateHomeLevel2); if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
 </script>
 </body></html>
