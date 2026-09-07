@@ -1,4 +1,4 @@
-const CACHE="learn-play-v20";
+const CACHE="learn-play-v21";
 const ASSETS=["./","./index.html","./manifest.json","./icon.svg"];
 self.addEventListener("install",event=>{
  self.skipWaiting();
