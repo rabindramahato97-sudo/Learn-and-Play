@@ -32,6 +32,7 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 <option>Nursery</option><option>LKG</option><option>UKG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option>
 </select>
 <button class="primary" onclick="startLearning()" style="margin-bottom:18px">Start Learning 🚀</button>
+<button id="homeLevel2Btn" class="primary hidden" onclick='start("Maths",2)' style="margin-bottom:18px">🔓 Maths Level 2</button>
 <p class="small">🔓 Level 2 unlocks after scoring 6/10 in Maths Level 1.</p>
 <div class="grid">
 <button class="subject math" onclick="start('Maths')">🔢<br>Maths</button>
@@ -52,7 +53,7 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 
 <section id="result" class="card hidden center">
 <div class="badge">🏆</div><h2 id="resultTitle"></h2><p id="resultText"></p>
-<button class="primary" onclick="goHome()">Continue Learning</button>
+<button id="continueBtn" class="primary" onclick="continueLearning()">Continue Learning</button>
 </section>
 </main>
 <script>
@@ -113,6 +114,16 @@ function startLearning(){
  if(cls) localStorage.setItem("lp_class", cls.value||"");
  start('Maths');
 }
+
+function updateHomeLevel2(){
+ const btn=document.getElementById("homeLevel2Btn");
+ if(btn) btn.classList.toggle("hidden", !level2Unlocked());
+}
+function continueLearning(){
+ if(subject==="Maths" && currentLevel===1 && level2Unlocked()) start("Maths",2);
+ else goHome();
+}
+
 function start(s,level=1){
  subject=s;currentLevel=level;qIndex=0;score=0;lives=3;coins=0;
  localStorage.setItem("lp_name",document.getElementById("childName").value||"");
@@ -155,10 +166,10 @@ function finish(){
  let old=document.getElementById("level2Btn"); if(old) old.remove();
  if(subject==="Maths" && currentLevel===1 && unlocked){
   const b=document.createElement("button"); b.id="level2Btn"; b.className="primary"; b.style.marginTop="12px"; b.textContent="🚀 Play Maths Level 2";
-  b.onclick=()=>start("Maths",2); result.appendChild(b);
+  b.onclick=()=>start("Maths",2); result.appendChild(b); updateHomeLevel2();
  }
 }
-function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden")}
-if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
+function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2()}
+updateHomeLevel2(); if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
 </script>
 </body></html>
