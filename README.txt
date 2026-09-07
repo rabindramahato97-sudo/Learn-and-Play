@@ -18,3 +18,8 @@ V8: Robust Level 2 unlock and home buttons for Maths, English, Hindi, EVS and GK
 V9: Fixed non-Maths answer checking; English, Hindi, EVS and GK can now correctly score and unlock Level 2. Cache v9.
 
 V11: Rebuilt subject Level-2 unlock/result flow and robust question-bank/answer handling.
+
+
+V12: Expanded the quiz bank to 30 questions per subject per level; Maths has 30 class-specific questions for each level for Nursery-Class 5. Cache updated to v12.
+
+V13: Expanded every subject to 100 questions per level. Maths has 100 questions per class for Level 1 and Level 2, Nursery-Class 5. Cache updated to v13.
