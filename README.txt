@@ -14,3 +14,5 @@ V6: Maths Level 2 unlock, Home Level 2 button, Continue Learning opens Level 2, 
 V7: English, Hindi, EVS and GK now have Level 1 and Level 2 progression with 10 questions each.
 
 V8: Robust Level 2 unlock and home buttons for Maths, English, Hindi, EVS and GK; generic unlock storage and cache v8.
+
+V9: Fixed non-Maths answer checking; English, Hindi, EVS and GK can now correctly score and unlock Level 2. Cache v9.

@@ -164,7 +164,8 @@ function render(){
 function answer(i,b){
  const q=questionsFor(subject)[qIndex];
  [...document.querySelectorAll(".option")].forEach(x=>x.disabled=true);
- if(i===q[2]){
+ const correct = (typeof q[2] === "number") ? (i===q[2]) : (q[1][i]===q[2]);
+ if(correct){
   score++;coins+=(currentLevel===2?20:10);stars++;localStorage.setItem("lp_stars",stars);document.getElementById("stars").textContent=stars;
   b.classList.add("good");document.getElementById("feedback").textContent="🎉 सही जवाब! +⭐ +🪙";
  }else{
@@ -180,7 +181,7 @@ function finish(){
  if(currentLevel===1 && passed){ localStorage.setItem("lp_"+subject+"_level2","1"); localStorage.setItem(levelKey(),"2"); }
  const unlocked=(subject==="Maths" && currentLevel===1 && passed)||subjectUnlocked(subject);
  document.getElementById("resultTitle").textContent=score>=8?"🌟 Excellent!":score>=6?"🎉 Great Job!":"👏 Keep Practising!";
- document.getElementById("resultText").textContent="आपने "+total+" में से "+score+" सही किए।  ⭐ कुल Stars: "+stars+"  🪙 Coins: "+coins+(subject==="Maths"&&currentLevel===1&&passed?"  🔓 Level 2 Unlocked!":"");
+ document.getElementById("resultText").textContent="आपने "+total+" में से "+score+" सही किए।  ⭐ कुल Stars: "+stars+"  🪙 Coins: "+coins+(currentLevel===1&&passed?"  🔓 Level 2 Unlocked!":"");
  const result=document.getElementById("result");
  let old=document.getElementById("level2Btn"); if(old) old.remove();
  if(currentLevel===1 && unlocked){
@@ -189,6 +190,6 @@ function finish(){
  }
 }
 function goHome(){document.getElementById("quiz").classList.add("hidden");document.getElementById("result").classList.add("hidden");document.getElementById("home").classList.remove("hidden");updateHomeLevel2()}
-updateHomeLevel2(); if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
+updateHomeLevel2(); window.addEventListener("pageshow",updateHomeLevel2); if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
 </script>
 </body></html>
