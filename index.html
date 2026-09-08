@@ -14,7 +14,7 @@
 h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radius:18px;padding:16px 18px;font-weight:700;cursor:pointer}
 .primary{background:#1689d7;color:white;width:100%;font-size:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .subject{min-height:120px;font-size:20px}.math{background:#ffd1d9}.eng{background:#cce5ff}.hin{background:#ffe4ad}.evs{background:#d8f6bd}.gk{background:#e5d5ff}
-.hidden{display:none}.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.pill{background:#eef5ff;padding:8px 12px;border-radius:15px}
+.hidden{display:none!important}.row{display:flex;gap:10px;align-items:center;justify-content:space-between}.pill{background:#eef5ff;padding:8px 12px;border-radius:15px}
 .option{display:block;width:100%;margin:10px 0;background:#f2f5f8;text-align:left}.option:active{transform:scale(.99)}
 .good{background:#d7f8dc!important}.bad{background:#ffd8d8!important}
 .small{color:#64748b}.back{background:#e9eef4}.center{text-align:center}.badge{font-size:50px}
@@ -369,19 +369,59 @@ refreshLearnerUI(); updateHomeLevel2();
 window.addEventListener("pageshow",()=>{activeProfile=null;document.getElementById("childName").value="";document.getElementById("classSelect").value="";refreshLearnerUI();updateHomeLevel2();});
 if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
 
-function openPremium(){document.getElementById("premiumModal").classList.remove("hidden")}
-function closePremium(e){if(!e || e.target===document.getElementById("premiumModal"))document.getElementById("premiumModal").classList.add("hidden")}
+let modalHistoryDepth=0;
+function hideModal(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.classList.add("hidden");
+  el.style.display="none";
+  el.setAttribute("aria-hidden","true");
+}
+function showModal(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.classList.remove("hidden");
+  el.style.display="flex";
+  el.setAttribute("aria-hidden","false");
+}
+function closeAllModals(){
+  hideModal("checkoutModal");
+  hideModal("premiumModal");
+  document.body.style.overflow="";
+}
+function openPremium(){
+  closeAllModals();
+  showModal("premiumModal");
+  document.body.style.overflow="hidden";
+}
+function closePremium(e){
+  const modal=document.getElementById("premiumModal");
+  if(!e || e.target===modal){ closeAllModals(); }
+}
 function requestPremium(plan){
-  closePremium();
+  hideModal("premiumModal");
   document.getElementById("checkoutPlan").textContent = "Selected plan: " + plan;
-  document.getElementById("checkoutModal").classList.remove("hidden");
+  showModal("checkoutModal");
+  document.body.style.overflow="hidden";
 }
 function closeCheckout(e){
-  if(!e || e.target===document.getElementById("checkoutModal")){
-    document.getElementById("checkoutModal").classList.add("hidden");
-    document.getElementById("premiumModal").classList.add("hidden");
-  }
+  const modal=document.getElementById("checkoutModal");
+  if(!e || e.target===modal){ closeAllModals(); }
 }
+// Extra-safe close handling for Android/system Back and Escape.
+window.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){
+    if(!document.getElementById("checkoutModal").classList.contains("hidden") || !document.getElementById("premiumModal").classList.contains("hidden")){
+      e.preventDefault(); closeAllModals();
+    }
+  }
+});
+window.addEventListener("popstate",function(){ closeAllModals(); });
+// Make sure a stale cached state can never leave a modal visually stuck.
+window.addEventListener("pageshow",function(){
+  hideModal("checkoutModal");
+  hideModal("premiumModal");
+});
 function submitPremiumRequest(){
   const name=document.getElementById("parentName").value.trim();
   const mobile=document.getElementById("parentMobile").value.trim();
