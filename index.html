@@ -9,7 +9,8 @@
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(#dff7ff,#f4ffe9);color:#17243a}
 .header{background:#1689d7;color:white;padding:22px 20px 18px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:34px;font-weight:800;line-height:1.0}.score{background:#fff2a8;color:#222;padding:12px 18px;border-radius:22px;font-size:22px}
+.logo{font-size:34px;font-weight:800;line-height:1.0}.score{background:#fff2a8;color:#222;padding:12px 18px;border-radius:22px;font-size:22px;border:0;font:inherit;cursor:pointer}
+
 .wrap{max-width:650px;margin:auto;padding:20px}.card{background:white;border-radius:28px;padding:22px;box-shadow:0 5px 20px #00000012;margin-bottom:18px}
 h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radius:18px;padding:16px 18px;font-weight:700;cursor:pointer}
 .primary{background:#1689d7;color:white;width:100%;font-size:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -28,7 +29,7 @@ h1,h2{margin-top:0}button,select,input{font:inherit}button{border:0;border-radiu
 </style>
 </head>
 <body>
-<header class="header"><div><div class="logo">Learn<br>& Play</div><div style="font-size:12px;opacity:.9;margin-top:5px">Fun • Learn • Grow 🌟</div></div><div style="display:flex;gap:8px;align-items:center"><button class="menuBtn" onclick="openMenu()" aria-label="Open menu">☰</button><div class="score">⭐ <span id="stars">0</span></div></div></header>
+<header class="header"><div><div class="logo">Learn<br>& Play</div><div style="font-size:12px;opacity:.9;margin-top:5px">Fun • Learn • Grow 🌟</div></div><div style="display:flex;gap:8px;align-items:center"><button class="menuBtn" onclick="openMenu()" aria-label="Open menu">☰</button><button class="score" type="button" onclick="openPremium()" aria-label="Open Premium"><span aria-hidden="true">⭐</span> <span id="stars">0</span></button></div></header>
 <div id="menuOverlay" class="menuOverlay hidden" onclick="closeMenu(event)"><aside class="sideMenu" onclick="event.stopPropagation()"><div class="menuHead"><h2 style="margin:0">☰ Menu</h2><button class="menuClose" onclick="closeMenu()">✕</button></div><div class="menuProfile"><div class="menuProfileTop"><div class="menuAvatar" id="menuAvatar">🧒</div><div><b id="menuName">New Learner</b><div class="small" id="menuClass">Class not selected</div></div></div><div class="menuStats"><div class="menuStat">⭐<b id="menuStars">0</b>Stars</div><div class="menuStat">🪙<b id="menuCoins">0</b>Coins</div><div class="menuStat">🔥<b id="menuStreak">0</b>Days</div></div></div><div class="menuSection">Learning</div><button class="menuItem" onclick="menuHome()">🏠 <span>Home</span></button><button class="menuItem" onclick="menuPage('subjects')">📚 <span>Subjects</span></button><button class="menuItem" onclick="showProfile();closeMenu()">👤 <span>My Profile</span></button><button class="menuItem" onclick="menuPage('progress')">📊 <span>My Progress</span></button><button class="menuItem" onclick="menuPage('achievements')">🏆 <span>Achievements</span></button><button class="menuItem" onclick="menuPage('parent')">👨‍👩‍👧 <span>Parent Dashboard</span></button><div class="menuSection">More</div><button class="menuItem" onclick="menuPage('rewards')">🎁 <span>Rewards</span></button><button class="menuItem" onclick="openPremium();closeMenu()">👑 <span>Premium</span></button><button class="menuItem" onclick="menuPage('settings')">⚙️ <span>Settings</span></button><button class="menuItem" onclick="menuPage('about')">ℹ️ <span>About Learn & Play</span></button></aside></div>
 <main class="wrap">
 <section id="home" class="card">
@@ -370,6 +371,7 @@ window.addEventListener("pageshow",()=>{activeProfile=null;document.getElementBy
 if("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js");
 
 let modalHistoryDepth=0;
+let modalOpenByHistory=false;
 function hideModal(id){
   const el=document.getElementById(id);
   if(!el) return;
@@ -384,16 +386,28 @@ function showModal(id){
   el.style.display="flex";
   el.setAttribute("aria-hidden","false");
 }
-function closeAllModals(){
+function anyModalOpen(){
+  return !document.getElementById("checkoutModal").classList.contains("hidden") || !document.getElementById("premiumModal").classList.contains("hidden");
+}
+function closeAllModals(skipHistory=false){
   hideModal("checkoutModal");
   hideModal("premiumModal");
   document.body.style.overflow="";
+  if(!skipHistory && modalOpenByHistory){
+    modalOpenByHistory=false;
+    if(history.state && history.state.learnPlayModal){ history.back(); }
+  }
 }
-function openPremium(){
-  closeAllModals();
-  showModal("premiumModal");
+function openModalWithHistory(id){
+  closeAllModals(true);
+  showModal(id);
   document.body.style.overflow="hidden";
+  if(!modalOpenByHistory){
+    history.pushState({learnPlayModal:true},"");
+    modalOpenByHistory=true;
+  }
 }
+function openPremium(){ openModalWithHistory("premiumModal"); }
 function closePremium(e){
   const modal=document.getElementById("premiumModal");
   if(!e || e.target===modal){ closeAllModals(); }
@@ -408,19 +422,16 @@ function closeCheckout(e){
   const modal=document.getElementById("checkoutModal");
   if(!e || e.target===modal){ closeAllModals(); }
 }
-// Extra-safe close handling for Android/system Back and Escape.
 window.addEventListener("keydown",function(e){
-  if(e.key==="Escape"){
-    if(!document.getElementById("checkoutModal").classList.contains("hidden") || !document.getElementById("premiumModal").classList.contains("hidden")){
-      e.preventDefault(); closeAllModals();
-    }
-  }
+  if(e.key==="Escape" && anyModalOpen()){ e.preventDefault(); closeAllModals(); }
 });
-window.addEventListener("popstate",function(){ closeAllModals(); });
-// Make sure a stale cached state can never leave a modal visually stuck.
+window.addEventListener("popstate",function(){
+  if(anyModalOpen()) closeAllModals(true);
+  modalOpenByHistory=false;
+});
 window.addEventListener("pageshow",function(){
-  hideModal("checkoutModal");
-  hideModal("premiumModal");
+  closeAllModals(true);
+  modalOpenByHistory=false;
 });
 function submitPremiumRequest(){
   const name=document.getElementById("parentName").value.trim();
